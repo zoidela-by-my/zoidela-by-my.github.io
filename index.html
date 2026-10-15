@@ -11,144 +11,157 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23111111'/><text x='50' y='68' font-size='54' text-anchor='middle' fill='white' font-family='Arial'>M</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <a class="skip" href="#work">Skip to work</a>
 
-<header class="site-header" id="top">
-  <nav class="nav" aria-label="Main navigation">
-    <a class="logo" href="#top" aria-label="My H Nguyen home">My H. Nguyen</a>
-    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="navLinks" aria-label="Open menu">
-      <span></span><span></span><span></span>
-    </button>
-    <div class="nav-links" id="navLinks">
-      <a href="#work">Work</a>
-      <a href="#about">About</a>
-      <a href="#approach">Approach</a>
-      <a href="#experience">Experience</a>
-      <a class="btn btn-small" href="#contact">Contact</a>
-    </div>
-  </nav>
+<!-- Floating overlay header: wordmark left, two circular buttons right. Hides on scroll down. -->
+<header class="site-header" id="siteHeader">
+  <a class="wordmark" href="#top" aria-label="My H Nguyen home">MY<br>H.<br>NGUYEN</a>
+  <div class="header-actions">
+    <a class="circle-btn circle-outline" href="mailto:nguyenmyh99@gmail.com" aria-label="Email My Nguyen">@</a>
+    <button class="circle-btn circle-solid" id="menuBtn" aria-expanded="false" aria-controls="menuOverlay" aria-label="Open menu"><span class="burger"><i></i><i></i><i></i></span></button>
+  </div>
 </header>
 
-<main>
-  <!-- HERO -->
-  <section class="hero">
-    <p class="eyebrow">My H. Nguyen — Seattle</p>
-    <h1>Multidisciplinary designer<br>designing for connection.</h1>
-    <p class="hero-lede">Senior Digital Designer at T-Mobile. Born in Vietnam, raised in California, based in Seattle. I work across brand, campaigns, and digital design — building visual stories and the systems behind them.</p>
-    <div class="hero-cta">
-      <a class="btn btn-dark" href="#work">View work</a>
-      <a class="btn btn-light" href="#contact">Get in touch</a>
-    </div>
-    <ul class="hero-meta" aria-label="Quick facts">
-      <li><strong>6+ years</strong><span>Design experience</span></li>
-      <li><strong>T-Mobile</strong><span>Senior Digital Designer</span></li>
-      <li><strong>University of San Francisco</strong><span>Design + Computer Science</span></li>
-    </ul>
-  </section>
-
-  <div class="services-strip" aria-label="Services">
-    <span>Brand Identity</span><span>Digital Design</span><span>Art Direction</span><span>Motion</span><span>Packaging</span><span>Illustration</span><span>Design Systems</span><span>Campaigns</span>
+<!-- Full-screen menu overlay -->
+<div class="menu-overlay" id="menuOverlay" hidden>
+  <nav class="menu-nav" aria-label="Menu">
+    <a href="#work">Work</a>
+    <a href="#about">About</a>
+    <a href="#cases">Case studies</a>
+    <a href="#experience">Experience</a>
+    <a href="#contact">Contact</a>
+  </nav>
+  <div class="menu-bottom">
+    <p class="menu-address">Seattle, Washington<br>United States</p>
+    <p class="menu-contact"><a href="mailto:nguyenmyh99@gmail.com">nguyenmyh99@gmail.com</a></p>
   </div>
+</div>
 
-  <!-- WORK -->
-  <section class="section" id="work">
-    <div class="section-head">
-      <div>
-        <p class="kicker">Selected work</p>
-        <h2>Work samples</h2>
-        <p class="muted">Selected projects across brand, campaigns, and digital. Select a project for more detail.</p>
-      </div>
-      <div class="filters" role="group" aria-label="Filter projects">
-        <button class="chip active" data-filter="all">All</button>
-        <button class="chip" data-filter="branding">Branding</button>
-        <button class="chip" data-filter="campaigns">Campaigns</button>
-        <button class="chip" data-filter="digital">Digital / UX</button>
-        <button class="chip" data-filter="social">Social</button>
-        <button class="chip" data-filter="play">Play</button>
-      </div>
+<main id="top">
+
+  <!-- HERO: black, full viewport, giant condensed uppercase headline; media frames scroll under it -->
+  <section class="hero">
+    <div class="hero-sticky">
+      <h1 class="hero-title">Multidisciplinary<br>Designer<br>Designing for<br>Connection</h1>
+      <p class="hero-sub">My H. Nguyen — Senior Digital Designer, Seattle</p>
     </div>
+    <div class="hero-media" aria-hidden="true">
+      <figure class="frame frame-wide"><img src="assets/tmobile.jpg" alt=""></figure>
+      <figure class="frame frame-portrait"><img src="assets/art.jpg" alt=""></figure>
+      <figure class="frame frame-wide"><img src="assets/seastreetcar.jpg" alt=""></figure>
+      <figure class="frame frame-portrait"><img src="assets/bongos.jpg" alt=""></figure>
+    </div>
+  </section>
+
+  <!-- WORK GRID: no heading, 3 columns, square image, bold uppercase title, underlined category -->
+  <section class="work" id="work">
     <div class="grid" id="projectGrid"></div>
-    <p class="empty" id="emptyState" hidden>No projects in that mix yet — try another filter.</p>
+    <div class="grid-cta">
+      <a class="pill pill-solid" href="https://myhnguyen.com/projects" target="_blank" rel="noopener">See all work</a>
+    </div>
   </section>
 
-  <!-- ABOUT -->
-  <section class="section about" id="about">
-    <div class="about-card">
-      <p class="kicker">About</p>
-      <h2>About</h2>
-      <p>I’m a multidisciplinary designer based in Seattle. Originally from Vietnam and raised in Sacramento and San Francisco, I studied design and computer science — a mix of analytical thinking and hands-on making that still shapes my work.</p>
-      <p>Outside of work, I explore Seattle, make mosaics, bake sourdough, and play video games.</p>
-      <div class="service-cloud" aria-label="Services">
-        <span>Brand Identity</span><span>Digital Design</span><span>UX / UI Design</span><span>Art Direction</span><span>Motion</span><span>Packaging</span><span>Illustration</span><span>Design Systems</span><span>Campaigns</span>
+  <!-- ABOUT PANEL: light full-bleed, kicker + giant mixed headline top, pill top-right, 3 divided columns -->
+  <section class="panel" id="about">
+    <div class="panel-head">
+      <div>
+        <p class="kicker">About</p>
+        <h2 class="panel-title">Hello, I’m <em>My</em></h2>
+      </div>
+      <a class="pill pill-outline" href="#contact">Get in touch</a>
+    </div>
+    <div class="panel-cols">
+      <div class="panel-col">
+        <h3>Bio</h3>
+        <p>Multidisciplinary designer based in Seattle. Originally from Vietnam, raised in Sacramento and San Francisco. I studied design and computer science, and I work across brand, campaigns, and digital — building visual stories and the systems behind them.</p>
+        <p>Outside of work: exploring Seattle, making mosaics, baking sourdough, and playing video games.</p>
+      </div>
+      <div class="panel-col">
+        <h3>Services</h3>
+        <ul class="plain-list">
+          <li>Brand Identity</li><li>Digital Design</li><li>UX / UI Design</li><li>Art Direction</li><li>Motion</li><li>Packaging</li><li>Illustration</li><li>Design Systems</li><li>Campaigns</li>
+        </ul>
+      </div>
+      <div class="panel-col">
+        <h3>Currently</h3>
+        <ul class="plain-list">
+          <li>Reading — <em>Hello Beautiful</em></li>
+          <li>Listening — Mustard Service</li>
+          <li>Watching — <em>Castlevania: Nocturne</em></li>
+          <li>Making — a co-op fishing game</li>
+        </ul>
       </div>
     </div>
-    <aside class="now-card" aria-label="Currently">
-      <h3>Currently</h3>
-      <dl>
-        <div><dt>Reading</dt><dd><em>Hello Beautiful</em> — Ann Napolitano</dd></div>
-        <div><dt>Listening to</dt><dd>“Paradise” — Mustard Service</dd></div>
-        <div><dt>Watching</dt><dd><em>Castlevania: Nocturne</em></dd></div>
-        <div><dt>Making</dt><dd>A co-op fishing game in Godot, plus this site</dd></div>
-      </dl>
-    </aside>
   </section>
 
-  <!-- APPROACH -->
-  <section class="section" id="approach">
-    <p class="kicker">Approach</p>
-    <h2>Centered on impact</h2>
-    <p class="muted wide">I look for the story inside a problem, build the structure that makes good design repeatable, and craft the experience so it lands — and lasts.</p>
-    <div class="steps">
-      <article class="step"><span class="step-no">01</span><h3>Find the narrative</h3><p>Every brief hides a human story. I start there — who is it for, what should they feel, and what should change?</p></article>
-      <article class="step"><span class="step-no">02</span><h3>Build the system</h3><p>Modular components, clear tokens, and flexible templates — so a good idea can scale across a whole campaign.</p></article>
-      <article class="step"><span class="step-no">03</span><h3>Make it stick</h3><p>Test, iterate with feedback, and ship work people remember — accessible, on-brand, and made to be used.</p></article>
+  <!-- MARQUEE BAND: black capsules, repeating services -->
+  <div class="marquee-band" aria-hidden="true"><div class="marquee-track" id="marqueeTrack"></div></div>
+
+  <!-- CASE STUDIES: intro panel, then text-left (28%) / image-right (72%, bleeds to edge) rows -->
+  <section class="cases" id="cases">
+    <div class="cases-intro">
+      <p class="kicker kicker-light">Selected case studies</p>
+      <h2 class="cases-title">Work that <em>lasts</em></h2>
+      <p class="cases-lede">A closer look at four projects — the problem, the system, and what it made possible.</p>
+      <span class="pill pill-outline-light">2021 — Present</span>
     </div>
+    <div id="caseList"></div>
   </section>
 
   <!-- EXPERIENCE -->
-  <section class="section" id="experience">
+  <section class="experience" id="experience">
     <p class="kicker">Experience</p>
-    <h2>Where I’ve been</h2>
+    <h2 class="section-title">Where I’ve been</h2>
     <ol class="timeline">
       <li><time>2021 — Present</time><div><h3>T-Mobile — Senior Digital Designer</h3><p>Executive presentations, campaign launches, product marketing, digital advertising and video. Defined the visual identity for the T-Mobile Fiber launch; builds modular design systems and component libraries.</p></div></li>
       <li><time>Before that</time><div><h3>Natera — Visual Designer</h3><p>Brand and print design in healthcare.</p></div></li>
       <li><time>Before that</time><div><h3>Jam City — Marketing Designer</h3><p>Social and advertising creative for mobile games.</p></div></li>
       <li><time>Earlier</time><div><h3>Frontline Foods · USF Career Services</h3><p>Branding, social, event and print work — including JobFest and Find Your Future.</p></div></li>
     </ol>
-    <div class="tools" aria-label="Tools">
-      <span>Figma</span><span>Illustrator</span><span>Photoshop</span><span>After Effects</span><span>Premiere</span><span>InDesign</span><span>Procreate</span><span>HTML / CSS / JS</span><span>Python</span><span>AI-assisted workflows</span>
-    </div>
+    <p class="tools-line">Figma · Illustrator · Photoshop · After Effects · Premiere · InDesign · Procreate · HTML / CSS / JS · Python · AI-assisted workflows</p>
   </section>
 
-  <!-- CONTACT -->
-  <section class="section contact" id="contact">
-    <p class="kicker">Contact</p>
-    <h2>Let’s talk</h2>
-    <p>Hiring for a senior brand, visual, or digital design role in Seattle, San Francisco, or New York? I’d love to hear about it.</p>
-    <form id="contactForm" class="contact-form">
-      <label>Your name<input name="name" required autocomplete="name" placeholder="Jane from Acme"></label>
-      <label>What’s this about?
-        <select name="topic"><option>Senior design role</option><option>Freelance / project</option><option>Design chat</option><option>Something else</option></select>
-      </label>
-      <label class="full">Message<textarea name="message" rows="4" required placeholder="Tell me a little about the role, team, and timeline…"></textarea></label>
-      <button class="btn btn-dark full" type="submit">Draft email</button>
-      <p class="form-note">This opens your email app with the message pre-filled to <strong>nguyenmyh99@gmail.com</strong> — nothing is sent until you hit send.</p>
-    </form>
-    <div class="contact-links">
-      <a href="mailto:nguyenmyh99@gmail.com">nguyenmyh99@gmail.com</a>
-      <a href="https://www.linkedin.com/in/myhnguyen99/" target="_blank" rel="noopener">LinkedIn ↗</a>
-      <a href="https://myhnguyen.com/" target="_blank" rel="noopener">Original portfolio ↗</a>
-    </div>
+  <!-- WIDE MEDIA BLOCK: full-bleed image inset in black gutters -->
+  <section class="media-block" aria-hidden="true">
+    <img src="assets/jobfest.jpg" alt="">
   </section>
+
 </main>
 
-<footer>
-  <p>© <span id="year"></span> My H. Nguyen · Seattle, WA · Built with HTML, CSS &amp; JavaScript — no framework, fully responsive.</p>
-  <a href="#top">Back to top ↑</a>
+<!-- FOOTER: black, wordmark top-left, social circles top-right, big contact blocks, legal bar -->
+<footer class="footer" id="contact">
+  <div class="footer-top">
+    <p class="footer-wordmark">MY<br>H.<br>NGUYEN</p>
+    <div class="socials">
+      <a class="social-circle" href="https://www.linkedin.com/in/myhnguyen99/" target="_blank" rel="noopener" aria-label="LinkedIn">in</a>
+      <a class="social-circle" href="mailto:nguyenmyh99@gmail.com" aria-label="Email">@</a>
+      <a class="social-circle" href="https://myhnguyen.com/" target="_blank" rel="noopener" aria-label="Original portfolio">↗</a>
+    </div>
+  </div>
+  <div class="footer-main">
+    <div class="footer-left">
+      <a class="footer-big" href="mailto:nguyenmyh99@gmail.com">nguyenmyh99@gmail.com</a>
+      <p class="footer-address">Seattle, Washington<br>Available for senior design roles — Seattle · San Francisco · New York</p>
+    </div>
+    <div class="footer-right">
+      <div class="footer-block">
+        <p>Hiring for a senior brand, visual, or digital design role?</p>
+        <a class="footer-huge" href="mailto:nguyenmyh99@gmail.com?subject=Senior%20design%20role">Let’s talk</a>
+      </div>
+      <div class="footer-block">
+        <p>Want to see the full body of work?</p>
+        <a class="footer-huge" href="https://myhnguyen.com/projects" target="_blank" rel="noopener">All projects</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bar">
+    <p>© <span id="year"></span> My H. Nguyen</p>
+    <p class="footer-links"><a href="#work">Work</a> | <a href="#about">About</a> | <a href="#cases">Case studies</a> | <a href="#experience">Experience</a></p>
+  </div>
 </footer>
 
 <!-- Project detail modal -->
@@ -160,11 +173,10 @@
     <h3 id="modalTitle"></h3>
     <p id="modalDesc"></p>
     <dl class="modal-meta"><div><dt>Role</dt><dd id="modalRole"></dd></div><div><dt>Focus</dt><dd id="modalFocus"></dd></div></dl>
-    <a class="btn btn-dark" href="#contact" id="modalCta">Ask me about this project</a>
+    <a class="pill pill-solid" href="mailto:nguyenmyh99@gmail.com" id="modalCta">Ask me about this project</a>
   </div>
 </div>
 
-<button class="to-top" id="toTop" aria-label="Back to top">↑</button>
 <script src="script.js"></script>
 </body>
 </html>
