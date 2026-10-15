@@ -1,6 +1,8 @@
 # My H. Nguyen — Portfolio
 
-A responsive, interactive portfolio site for My H. Nguyen, multidisciplinary / Senior Digital Designer based in Seattle. Modeled on the structure and spirit of [myhnguyen.com](https://myhnguyen.com/) — big personal hero, selected work, about, approach, experience, and contact — rebuilt from scratch in plain HTML, CSS, and JavaScript (no framework, no build step).
+A responsive, interactive portfolio site for My H. Nguyen, multidisciplinary / Senior Digital Designer based in Seattle. Modeled on the structure of [myhnguyen.com](https://myhnguyen.com/) — personal hero, selected work, about, approach, experience, and contact — rebuilt from scratch in plain HTML, CSS, and JavaScript (no framework, no build step). Design direction: simple, clean, and sleek — white, black, and gray, with the project photography carrying the color.
+
+Project images in `assets/` are My's own work, taken from the project pages of her own site (myhnguyen.com) and optimized to ~1200px wide JPEGs.
 
 **Live:** https://zoidela-by-my.github.io/
 
