@@ -42,33 +42,41 @@ const projects = [
     role:"UX/UI Designer", focus:"UX/UI, branding, transit" },
 ];
 
-// Render project cards
+// Work grid — square image, display title, underlined category line
 const grid = document.getElementById("projectGrid");
-const empty = document.getElementById("emptyState");
-function render(filter="all"){
-  grid.innerHTML = "";
-  const list = projects.filter(p => filter==="all" || p.cats.includes(filter));
-  empty.hidden = list.length > 0;
-  list.forEach((p,i) => {
-    const b = document.createElement("button");
-    b.className = "card"; b.type = "button";
-    b.setAttribute("aria-label", `Open ${p.title} project details`);
-    b.innerHTML = `<div class="card-art">${p.img ? `<img src="${p.img}" alt="${p.title} project image" loading="lazy">` : `<span class="mark">${p.mark}</span>`}</div>
-      <div class="card-body"><p class="card-tags">${p.tags}</p><h3>${p.title}</h3><p>${p.short}</p></div>`;
-    b.addEventListener("click", () => openModal(p));
-    grid.appendChild(b);
-    requestAnimationFrame(() => setTimeout(() => b.classList.add("in"), 40*i));
-  });
-}
-render();
+projects.forEach((p, i) => {
+  const b = document.createElement("button");
+  b.className = "card"; b.type = "button";
+  b.setAttribute("aria-label", `Open ${p.title} project details`);
+  b.innerHTML = `<div class="card-art"><img src="${p.img}" alt="${p.title} project image" loading="lazy"></div>
+    <div class="card-body"><h3>${p.title}</h3><p class="card-tags">${p.tags}</p><p class="short">${p.short}</p></div>`;
+  b.addEventListener("click", () => openModal(p));
+  grid.appendChild(b);
+  requestAnimationFrame(() => setTimeout(() => b.classList.add("in"), 40 * i));
+});
 
-// Filters
-document.querySelectorAll(".chip").forEach(chip => {
-  chip.addEventListener("click", () => {
-    document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
-    chip.classList.add("active");
-    render(chip.dataset.filter);
-  });
+// Case studies — text column left, image right bleeding to the edge
+const featured = [
+  { id: "tmobile", pill: "2021 — Present" },
+  { id: "jobfest", pill: "Event · Print" },
+  { id: "jamcity", pill: "Social · Advertising" },
+  { id: "seastreetcar", pill: "UX / UI · Seattle" },
+];
+const caseList = document.getElementById("caseList");
+featured.forEach(f => {
+  const p = projects.find(x => x.id === f.id);
+  const row = document.createElement("article");
+  row.className = "case-row";
+  row.innerHTML = `<div class="case-text">
+      <span class="case-year">${f.pill}</span>
+      <h3>${p.title}</h3>
+      <p class="case-client">${p.tags}</p>
+      <p class="case-desc">${p.desc}</p>
+      <button class="pill pill-outline" type="button">View case</button>
+    </div>
+    <div class="case-img"><img src="${p.img}" alt="${p.title} project image" loading="lazy"></div>`;
+  row.querySelector("button").addEventListener("click", () => openModal(p));
+  caseList.appendChild(row);
 });
 
 // Modal
@@ -81,8 +89,7 @@ function openModal(p){
   document.getElementById("modalDesc").textContent = p.desc;
   document.getElementById("modalRole").textContent = p.role;
   document.getElementById("modalFocus").textContent = p.focus;
-  const art = document.getElementById("modalArt");
-  art.innerHTML = p.img ? `<img src="${p.img}" alt="${p.title} project image">` : `<span class="mark">${p.mark}</span>`;
+  document.getElementById("modalArt").innerHTML = `<img src="${p.img}" alt="${p.title} project image">`;
   backdrop.hidden = false;
   document.body.style.overflow = "hidden";
   document.getElementById("modalClose").focus();
@@ -97,29 +104,33 @@ document.getElementById("modalCta").addEventListener("click", closeModal);
 backdrop.addEventListener("click", e => { if (e.target === backdrop) closeModal(); });
 document.addEventListener("keydown", e => { if (e.key === "Escape" && !backdrop.hidden) closeModal(); });
 
-// Mobile menu
+// Full-screen menu overlay
 const menuBtn = document.getElementById("menuBtn");
-const navLinks = document.getElementById("navLinks");
-menuBtn.addEventListener("click", () => {
-  const open = navLinks.classList.toggle("open");
+const overlay = document.getElementById("menuOverlay");
+function setMenu(open){
+  overlay.hidden = !open;
   menuBtn.setAttribute("aria-expanded", open);
   menuBtn.setAttribute("aria-label", open ? "Close menu" : "Open menu");
-});
-navLinks.querySelectorAll("a").forEach(a => a.addEventListener("click", () => {
-  navLinks.classList.remove("open"); menuBtn.setAttribute("aria-expanded","false");
-}));
+  menuBtn.innerHTML = open ? '<span style="font-size:1.5rem;line-height:1">×</span>' : '<span class="burger"><i></i><i></i><i></i></span>';
+  document.body.style.overflow = open ? "hidden" : "";
+}
+menuBtn.addEventListener("click", () => setMenu(overlay.hidden));
+overlay.querySelectorAll("a").forEach(a => a.addEventListener("click", () => setMenu(false)));
+document.addEventListener("keydown", e => { if (e.key === "Escape" && !overlay.hidden) setMenu(false); });
 
-// Contact form -> pre-filled email (nothing sent automatically)
-document.getElementById("contactForm").addEventListener("submit", e => {
-  e.preventDefault();
-  const d = new FormData(e.target);
-  const subject = encodeURIComponent(`${d.get("topic")} — from ${d.get("name")}`);
-  const body = encodeURIComponent(`Hi My,\n\n${d.get("message")}\n\n— ${d.get("name")}`);
-  location.href = `mailto:nguyenmyh99@gmail.com?subject=${subject}&body=${body}`;
-});
+// Header hides on scroll down, returns on scroll up
+const header = document.getElementById("siteHeader");
+let lastY = 0;
+addEventListener("scroll", () => {
+  if (!overlay.hidden) return;
+  const y = scrollY;
+  header.classList.toggle("hidden", y > 220 && y > lastY);
+  lastY = y;
+}, { passive: true });
 
-// Back to top + year
-const toTop = document.getElementById("toTop");
-addEventListener("scroll", () => toTop.classList.toggle("show", scrollY > 600), {passive:true});
-toTop.addEventListener("click", () => scrollTo({top:0, behavior:"smooth"}));
+// Marquee band — services capsules, duplicated for a seamless loop
+const services = ["Brand Identity","Digital Design","Art Direction","Motion","Packaging","Illustration","Design Systems","Campaigns"];
+const track = document.getElementById("marqueeTrack");
+track.innerHTML = [...services, ...services].map(t => `<span>${t}</span>`).join("");
+
 document.getElementById("year").textContent = new Date().getFullYear();
