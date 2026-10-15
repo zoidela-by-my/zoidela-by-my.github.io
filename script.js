@@ -118,15 +118,60 @@ menuBtn.addEventListener("click", () => setMenu(overlay.hidden));
 overlay.querySelectorAll("a").forEach(a => a.addEventListener("click", () => setMenu(false)));
 document.addEventListener("keydown", e => { if (e.key === "Escape" && !overlay.hidden) setMenu(false); });
 
-// Header hides on scroll down, returns on scroll up
+// Header + hero scroll animation — scrubbed by scroll position, fully reversible,
+// matching the reference site's behavior:
+//  - the two circular buttons hide after ~425px of downward scroll
+//  - the wordmark hides later, after ~980px of downward scroll
+//  - scrolling back up ~30px brings everything back
+//  - the hero headline stays pinned for ~1.15 viewport heights (the sticky stage
+//    plus the hero's extra height), then releases and scrolls away at 1:1
+//  - the single media frame rises 1:1 at first, then scales up, centered,
+//    to near full-bleed by ~820px of scroll, always behind the headline
 const header = document.getElementById("siteHeader");
-let lastY = 0;
-addEventListener("scroll", () => {
-  if (!overlay.hidden) return;
-  const y = scrollY;
-  header.classList.toggle("hidden", y > 220 && y > lastY);
+const reel = document.getElementById("heroReel");
+const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+let lastY = scrollY, upAccum = 0;
+
+function onScrollFrame(){
+  const y = scrollY, vh = innerHeight;
+  // header show/hide
+  if (overlay.hidden) {
+    const dy = y - lastY;
+    if (dy < 0) {
+      upAccum += -dy;
+      if (upAccum >= 30) header.classList.remove("hide-buttons", "hide-logo");
+    } else if (dy > 0) {
+      upAccum = 0;
+      if (y > 425) header.classList.add("hide-buttons");
+      if (y > 980) header.classList.add("hide-logo");
+    }
+    if (y < 10) header.classList.remove("hide-buttons", "hide-logo");
+  }
   lastY = y;
-}, { passive: true });
+  // hero reel rise + scale (scrubbed)
+  if (reel && !reduceMotion) {
+    const startOffset = vh * 0.40;
+    const offsetY = startOffset - Math.min(y, startOffset);
+    const sp = Math.max(0, Math.min(1, (y - 200) / 620));
+    const base = reel.offsetWidth || 420;
+    const target = innerWidth * 0.98 / base;
+    const scale = 1 + sp * (target - 1);
+    reel.style.transform = `translate(-50%, -50%) translateY(${offsetY}px) scale(${scale})`;
+  }
+  requestAnimationFrame(onScrollFrame);
+}
+requestAnimationFrame(onScrollFrame);
+
+// Reel stills crossfade on their own timeline, like a playing showreel
+const reelImgs = reel ? reel.querySelectorAll(".reel-img") : [];
+if (reelImgs.length > 1 && !reduceMotion) {
+  let ri = 0;
+  setInterval(() => {
+    reelImgs[ri].classList.remove("active");
+    ri = (ri + 1) % reelImgs.length;
+    reelImgs[ri].classList.add("active");
+  }, 4000);
+}
 
 // Marquee band — services capsules, duplicated for a seamless loop
 const services = ["Brand Identity","Digital Design","Art Direction","Motion","Packaging","Illustration","Design Systems","Campaigns"];
