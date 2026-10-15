@@ -43,17 +43,21 @@
 
 <main id="top">
 
-  <!-- HERO: black, full viewport, giant condensed uppercase headline; media frames scroll under it -->
-  <section class="hero">
-    <div class="hero-sticky">
-      <h1 class="hero-title">Multidisciplinary<br>Designer<br>Designing for<br>Connection</h1>
-      <p class="hero-sub">My H. Nguyen — Senior Digital Designer, Seattle</p>
-    </div>
-    <div class="hero-media" aria-hidden="true">
-      <figure class="frame frame-wide"><img src="assets/tmobile.jpg" alt=""></figure>
-      <figure class="frame frame-portrait"><img src="assets/art.jpg" alt=""></figure>
-      <figure class="frame frame-wide"><img src="assets/seastreetcar.jpg" alt=""></figure>
-      <figure class="frame frame-portrait"><img src="assets/bongos.jpg" alt=""></figure>
+  <!-- HERO: scroll-scrubbed, matching the reference — the headline stays pinned while
+       a single centered media frame rises from the bottom and scales to full-bleed
+       behind it, then the whole hero releases and scrolls away. Placeholder art:
+       free images from Lorem Picsum (picsum.photos), crossfading like a showreel. -->
+  <section class="hero" id="hero">
+    <div class="hero-stage">
+      <div class="hero-reel" id="heroReel" aria-hidden="true">
+        <img class="reel-img active" src="https://picsum.photos/seed/nguyen-hero1/1600/900" alt="">
+        <img class="reel-img" src="https://picsum.photos/seed/nguyen-hero3/1600/900" alt="" loading="lazy">
+        <img class="reel-img" src="https://picsum.photos/seed/nguyen-hero5/1600/900" alt="" loading="lazy">
+      </div>
+      <div class="hero-copy">
+        <h1 class="hero-title">Multidisciplinary<br>Designer<br>Designing for<br>Connection</h1>
+        <p class="hero-sub">My H. Nguyen — Senior Digital Designer, Seattle</p>
+      </div>
     </div>
   </section>
 
