@@ -2,6 +2,8 @@
 
 A responsive, interactive portfolio site for My H. Nguyen, multidisciplinary / Senior Digital Designer based in Seattle. Modeled on the structure of [myhnguyen.com](https://myhnguyen.com/) — personal hero, selected work, about, approach, experience, and contact — rebuilt from scratch in plain HTML, CSS, and JavaScript (no framework, no build step). Design direction: simple, clean, and sleek — white, black, and gray, with the project photography carrying the color.
 
+Layout (Oct 15, 2026): rebuilt to match the layout structure of ladespensa.es at My's request — floating overlay header with circular buttons and a full-screen menu, black hero with a pinned giant condensed headline and media frames scrolling beneath it, a heading-less 3-column work grid (square image, display title, underlined category), a light panel with three divider columns, a black capsule marquee band, case-study rows (narrow text column, image bleeding to the right edge), a wide media block in black gutters, and a tall black footer with oversized contact links. Only the layout structure was followed — all text, images, and branding are My's own.
+
 Project images in `assets/` are My's own work, taken from the project pages of her own site (myhnguyen.com) and optimized to ~1200px wide JPEGs.
 
 **Live:** https://zoidela-by-my.github.io/
