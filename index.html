@@ -16,6 +16,7 @@
 </head>
 <body>
 <a class="skip" href="#work">Skip to work</a>
+<div class="loader" id="loader" aria-hidden="true"><p class="loader-mark">MY<br>H.<br>NGUYEN</p></div>
 
 <!-- Floating overlay header: wordmark left, two circular buttons right. Hides on scroll down. -->
 <header class="site-header" id="siteHeader">
@@ -54,6 +55,8 @@
         <img class="reel-img" src="https://picsum.photos/seed/nguyen-hero3/1600/900" alt="" loading="lazy">
         <img class="reel-img" src="https://picsum.photos/seed/nguyen-hero5/1600/900" alt="" loading="lazy">
       </div>
+      <span class="glyph glyph-ring" aria-hidden="true"></span>
+      <span class="glyph glyph-cross" aria-hidden="true"></span>
       <div class="hero-copy">
         <h1 class="hero-title">Multidisciplinary<br>Designer<br>Designing for<br>Connection</h1>
         <p class="hero-sub">My H. Nguyen — Senior Digital Designer, Seattle</p>
@@ -103,7 +106,16 @@
   </section>
 
   <!-- MARQUEE BAND: black capsules, repeating services -->
-  <div class="marquee-band" aria-hidden="true"><div class="marquee-track" id="marqueeTrack"></div></div>
+  <div class="marquee-band" id="marqueeBand" role="button" tabindex="0" aria-expanded="false" aria-controls="bandPanel" title="Get in touch"><div class="marquee-track" id="marqueeTrack"></div></div>
+  <div class="band-panel" id="bandPanel" hidden>
+    <form id="bandForm" class="band-form">
+      <p class="band-title">Tell me about your project</p>
+      <label>Your name<input name="name" required autocomplete="name" placeholder="Jane from Acme"></label>
+      <label class="full">Message<textarea name="message" rows="4" required placeholder="The role, the team, the timeline…"></textarea></label>
+      <button class="pill pill-solid" type="submit">Draft email</button>
+      <p class="band-note">Opens your email app with the message pre-filled to nguyenmyh99@gmail.com — nothing sends until you hit send.</p>
+    </form>
+  </div>
 
   <!-- CASE STUDIES: intro panel, then text-left (28%) / image-right (72%, bleeds to edge) rows -->
   <section class="cases" id="cases">
@@ -113,7 +125,12 @@
       <p class="cases-lede">A closer look at four projects — the problem, the system, and what it made possible.</p>
       <span class="pill pill-outline-light">2021 — Present</span>
     </div>
-    <div id="caseList"></div>
+    <div class="cases-pin" id="casesPin">
+      <div class="cases-stage">
+        <div class="case-texts" id="caseTexts"></div>
+        <div class="case-imgs" id="caseImgs"></div>
+      </div>
+    </div>
   </section>
 
   <!-- EXPERIENCE -->
@@ -181,6 +198,8 @@
   </div>
 </div>
 
+<div class="cursor" id="cursor" aria-hidden="true"><span id="cursorLabel"></span></div>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
