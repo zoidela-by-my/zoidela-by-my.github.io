@@ -201,14 +201,6 @@ html.lenis, html.lenis body{height:auto}
   body.has-cursor .cursor{display:flex}
 }
 
-/* Hero decorative glyphs: slow, subtle motion */
-.glyph{position:absolute;z-index:2;pointer-events:none;opacity:.85}
-.glyph-ring{width:44px;height:44px;border:3px solid #fff;border-radius:50%;right:12%;top:20%;animation:spin 16s linear infinite}
-.glyph-ring::after{content:"";position:absolute;inset:10px;border:2px solid #fff;border-radius:50%}
-.glyph-cross{width:30px;height:30px;left:44%;bottom:16%}
-.glyph-cross::before,.glyph-cross::after{content:"";position:absolute;background:#fff;left:50%;top:0;width:3px;height:100%;transform:translateX(-50%)}
-.glyph-cross::after{transform:translateX(-50%) rotate(90deg)}
-.glyph-cross{animation:spin 22s linear infinite reverse}
 @keyframes spin{to{transform:rotate(360deg)}}
 
 
@@ -270,6 +262,5 @@ html.lenis, html.lenis body{height:auto}
   .case-block{position:static;opacity:1!important;transform:none!important;margin-bottom:3rem}
   .case-imgs{position:static}
   .case-imgs img{position:static;height:52vh;margin-bottom:1rem}
-  .glyph-ring,.glyph-cross{animation:none}
   .loader{transition:none}
 }
