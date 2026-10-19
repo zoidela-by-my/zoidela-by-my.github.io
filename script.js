@@ -55,29 +55,60 @@ projects.forEach((p, i) => {
   requestAnimationFrame(() => setTimeout(() => b.classList.add("in"), 40 * i));
 });
 
-// Case studies — text column left, image right bleeding to the edge
+// Case studies — pinned sequence: one text block and one image per case,
+// crossfaded / diagonal-wiped by scroll in updateCases()
 const featured = [
   { id: "tmobile", pill: "2021 — Present" },
   { id: "jobfest", pill: "Event · Print" },
   { id: "jamcity", pill: "Social · Advertising" },
   { id: "seastreetcar", pill: "UX / UI · Seattle" },
 ];
-const caseList = document.getElementById("caseList");
+const caseTexts = document.getElementById("caseTexts");
+const caseImgs = document.getElementById("caseImgs");
+const caseBlocks = [], caseImgEls = [];
 featured.forEach(f => {
   const p = projects.find(x => x.id === f.id);
-  const row = document.createElement("article");
-  row.className = "case-row";
-  row.innerHTML = `<div class="case-text">
-      <span class="case-year">${f.pill}</span>
-      <h3>${p.title}</h3>
-      <p class="case-client">${p.tags}</p>
-      <p class="case-desc">${p.desc}</p>
-      <button class="pill pill-outline" type="button">View case</button>
-    </div>
-    <div class="case-img"><img src="${p.img}" alt="${p.title} project image" loading="lazy"></div>`;
-  row.querySelector("button").addEventListener("click", () => openModal(p));
-  caseList.appendChild(row);
+  const block = document.createElement("div");
+  block.className = "case-block";
+  block.innerHTML = `<span class="case-year">${f.pill}</span>
+    <h3>${p.title}</h3>
+    <p class="case-client">${p.tags}</p>
+    <p class="case-desc">${p.desc}</p>
+    <button class="pill pill-outline" type="button">View case</button>`;
+  block.querySelector("button").addEventListener("click", () => openModal(p));
+  caseTexts.appendChild(block); caseBlocks.push(block);
+  const img = document.createElement("img");
+  img.src = p.img; img.alt = `${p.title} project image`; img.loading = "lazy";
+  caseImgs.appendChild(img); caseImgEls.push(img);
 });
+caseImgEls.forEach((img, i) => { img.style.zIndex = i; });
+
+function updateCases(){
+  const pin = document.getElementById("casesPin");
+  if (!pin || reduceMotion) return;
+  const vh = innerHeight;
+  const total = pin.offsetHeight - vh;
+  if (total <= 0) return;
+  const rect = pin.getBoundingClientRect();
+  const progress = Math.max(0, Math.min(1, -rect.top / total));
+  const pos = progress * (caseBlocks.length - 1);
+  const i = Math.min(caseBlocks.length - 2, Math.floor(pos));
+  const frac = pos - Math.floor(pos);
+  caseBlocks.forEach((b, k) => {
+    let o = 0, y = 0;
+    if (k === i) { o = 1 - frac; y = -frac * 24; }
+    else if (k === i + 1) { o = frac; y = (1 - frac) * 24; }
+    else if (pos >= caseBlocks.length - 1 && k === caseBlocks.length - 1) { o = 1; y = 0; }
+    b.style.opacity = o;
+    b.style.transform = `translateY(calc(-50% + ${y}px))`;
+    b.style.pointerEvents = o > 0.5 ? "auto" : "none";
+  });
+  caseImgEls.forEach((img, k) => {
+    if (k <= i) img.style.clipPath = "none";
+    else if (k === i + 1) img.style.clipPath = `polygon(${100 - 140 * frac}% 0, 100% 0, 100% 100%, ${100 - 110 * frac}% 100%)`;
+    else img.style.clipPath = "polygon(100% 0, 100% 0, 100% 100%, 100% 100%)";
+  });
+}
 
 // Modal
 const backdrop = document.getElementById("modalBackdrop");
@@ -107,8 +138,17 @@ document.addEventListener("keydown", e => { if (e.key === "Escape" && !backdrop.
 // Full-screen menu overlay
 const menuBtn = document.getElementById("menuBtn");
 const overlay = document.getElementById("menuOverlay");
+let lenis = null;
 function setMenu(open){
-  overlay.hidden = !open;
+  if (open) {
+    overlay.hidden = false;
+    requestAnimationFrame(() => requestAnimationFrame(() => overlay.classList.add("open")));
+    if (lenis) lenis.stop();
+  } else {
+    overlay.classList.remove("open");
+    setTimeout(() => { overlay.hidden = true; }, 560);
+    if (lenis) lenis.start();
+  }
   menuBtn.setAttribute("aria-expanded", open);
   menuBtn.setAttribute("aria-label", open ? "Close menu" : "Open menu");
   menuBtn.innerHTML = open ? '<span style="font-size:1.5rem;line-height:1">×</span>' : '<span class="burger"><i></i><i></i><i></i></span>';
@@ -158,6 +198,7 @@ function onScrollFrame(){
     const scale = 1 + sp * (target - 1);
     reel.style.transform = `translate(-50%, -50%) translateY(${offsetY}px) scale(${scale})`;
   }
+  if (typeof updateCases === "function") updateCases();
   requestAnimationFrame(onScrollFrame);
 }
 requestAnimationFrame(onScrollFrame);
@@ -179,3 +220,69 @@ const track = document.getElementById("marqueeTrack");
 track.innerHTML = [...services, ...services].map(t => `<span>${t}</span>`).join("");
 
 document.getElementById("year").textContent = new Date().getFullYear();
+
+// ===== Smooth scrolling (Lenis), guarded: native scroll remains the fallback =====
+if (window.Lenis && !reduceMotion) {
+  lenis = new Lenis({ duration: 1.15, smoothWheel: true });
+  const lenisRaf = t => { lenis.raf(t); requestAnimationFrame(lenisRaf); };
+  requestAnimationFrame(lenisRaf);
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener("click", e => {
+      const target = document.querySelector(a.getAttribute("href"));
+      if (target) {
+        e.preventDefault();
+        if (!overlay.hidden) { setMenu(false); setTimeout(() => lenis.scrollTo(target), 80); }
+        else lenis.scrollTo(target);
+      }
+    });
+  });
+}
+
+// ===== Custom cursor: small dot; grows over interactive elements,
+// ring over images. The native cursor stays visible, as on the reference. =====
+if (matchMedia("(pointer: fine)").matches && !reduceMotion) {
+  document.body.classList.add("has-cursor");
+  const cursor = document.getElementById("cursor");
+  let cx = -100, cy = -100, tx = -100, ty = -100;
+  addEventListener("pointermove", e => { tx = e.clientX; ty = e.clientY; }, { passive: true });
+  (function cursorLoop(){
+    cx += (tx - cx) * 0.22; cy += (ty - cy) * 0.22;
+    cursor.style.left = cx + "px"; cursor.style.top = cy + "px";
+    requestAnimationFrame(cursorLoop);
+  })();
+  document.addEventListener("mouseover", e => {
+    const img = e.target.closest(".card-art, .case-imgs, .hero-reel, .media-block");
+    const inter = e.target.closest("a, button, .card, .marquee-band");
+    cursor.classList.toggle("ring", !!img);
+    cursor.classList.toggle("grow", !img && !!inter);
+  });
+}
+
+// ===== Load intro: black screen with wordmark, then reveal =====
+const loader = document.getElementById("loader");
+function dismissLoader(){ if (loader) loader.classList.add("done"); }
+addEventListener("load", () => setTimeout(dismissLoader, 450));
+setTimeout(dismissLoader, 3200); // fallback
+
+// ===== Marquee band: click expands the contact panel (stays open) =====
+const band = document.getElementById("marqueeBand");
+const bandPanel = document.getElementById("bandPanel");
+function openBand(){
+  if (!bandPanel.hidden) return;
+  bandPanel.hidden = false;
+  bandPanel.style.maxHeight = "0px";
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    bandPanel.style.transition = "max-height .6s cubic-bezier(.22,1,.36,1)";
+    bandPanel.style.maxHeight = bandPanel.scrollHeight + "px";
+  }));
+  band.setAttribute("aria-expanded", "true");
+}
+band.addEventListener("click", openBand);
+band.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openBand(); } });
+document.getElementById("bandForm").addEventListener("submit", e => {
+  e.preventDefault();
+  const d = new FormData(e.target);
+  const subject = encodeURIComponent("Project inquiry — from " + d.get("name"));
+  const body = encodeURIComponent("Hi My,\n\n" + d.get("message") + "\n\n— " + d.get("name"));
+  location.href = `mailto:nguyenmyh99@gmail.com?subject=${subject}&body=${body}`;
+});
