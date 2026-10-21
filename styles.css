@@ -9,8 +9,8 @@
   --line:#2a2a28;
   --accent:#ff4344;
   --sans:"Quicksand", "Avenir Next", "Segoe UI", sans-serif;
-  --logo:"Shrikhand", "Quicksand", sans-serif;
-  --sidebar:25vw;
+  --logo:"Quicksand", sans-serif;
+  --sidebar:22.5vw;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:auto}
@@ -28,13 +28,13 @@ a{color:var(--ink)}
 /* ---------- Sidebar ---------- */
 .sidebar{
   position:fixed;left:0;top:0;width:var(--sidebar);height:100vh;height:100dvh;
-  padding:30px;display:flex;flex-direction:column;background:var(--bg);z-index:60;
+  padding:22px 20px;display:flex;flex-direction:column;background:var(--bg);z-index:60;
 }
 .logo{
-  font-family:var(--logo);font-size:2.1rem;line-height:1.15;letter-spacing:.01em;color:var(--ink);
+  font-family:var(--logo);font-weight:700;font-size:1.9rem;line-height:1.2;letter-spacing:.01em;color:var(--ink);
   text-decoration:none;font-weight:400;
 }
-.side-nav{display:flex;flex-direction:column;gap:.65rem;margin-top:2.6rem}
+.side-nav{display:flex;flex-direction:column;gap:.45rem;margin-top:1.5rem}
 .side-nav a{
   text-transform:uppercase;letter-spacing:.05em;font-size:.95rem;text-decoration:none;
   display:flex;justify-content:space-between;max-width:250px;
@@ -43,16 +43,16 @@ a{color:var(--ink)}
 .side-nav a:hover{color:var(--accent)}
 .side-nav a:hover span{color:var(--accent)}
 .side-label{
-  margin:2.8rem 0 .8rem;text-transform:uppercase;letter-spacing:.05em;
+  margin:1.5rem 0 .55rem;text-transform:uppercase;letter-spacing:.05em;
   font-size:.78rem;color:var(--muted);
 }
-.side-projects{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.5rem;overflow:auto}
+.side-projects{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.3rem;overflow:auto;line-height:1.45}
 .side-projects a{
   text-transform:uppercase;letter-spacing:.045em;font-size:.85rem;text-decoration:none;color:var(--ink);
 }
 .side-projects a::before{content:"→ ";color:var(--muted)}
 .side-projects a:hover{color:var(--accent)}
-.side-socials{margin-top:auto;display:flex;gap:.6rem;padding-top:2rem}
+.side-socials{margin-top:auto;display:flex;gap:.6rem;padding-top:1.2rem}
 .social-circle{
   width:42px;height:42px;border:1.5px solid var(--ink);border-radius:50%;
   display:inline-flex;align-items:center;justify-content:center;
@@ -62,7 +62,7 @@ a{color:var(--ink)}
 .social-circle:hover{background:var(--ink);color:#000}
 
 /* ---------- Content column ---------- */
-.content{margin-left:var(--sidebar);padding:35px 45px 0 30px}
+.content{margin-left:var(--sidebar);padding:30px 45px 0 18px}
 .col-label{text-transform:uppercase;letter-spacing:.05em;font-size:.8rem;color:var(--muted);margin:0 0 .9rem}
 
 /* ---------- Project feed ---------- */
