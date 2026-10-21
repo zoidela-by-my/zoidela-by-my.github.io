@@ -7,16 +7,16 @@
   --ink:#f2f0ea;
   --muted:#9a978c;
   --line:#2a2a28;
-  --accent:#ff4a3d;
-  --mono:"Space Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-  --logo:"UnifrakturMaguntia", serif;
+  --accent:#ff4344;
+  --sans:"Quicksand", "Avenir Next", "Segoe UI", sans-serif;
+  --logo:"Shrikhand", "Quicksand", sans-serif;
   --sidebar:25vw;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:auto}
 body{
   margin:0;background:var(--bg);color:var(--ink);
-  font-family:var(--mono);font-size:16px;line-height:1.6;
+  font-family:var(--sans);font-size:16.5px;line-height:1.7;font-weight:500;
   opacity:0;transition:opacity .8s ease;
 }
 body.ready{opacity:1}
@@ -31,24 +31,24 @@ a{color:var(--ink)}
   padding:30px;display:flex;flex-direction:column;background:var(--bg);z-index:60;
 }
 .logo{
-  font-family:var(--logo);font-size:2.5rem;line-height:1.05;color:var(--ink);
+  font-family:var(--logo);font-size:2.1rem;line-height:1.15;letter-spacing:.01em;color:var(--ink);
   text-decoration:none;font-weight:400;
 }
 .side-nav{display:flex;flex-direction:column;gap:.65rem;margin-top:2.6rem}
 .side-nav a{
-  text-transform:uppercase;letter-spacing:.12em;font-size:.95rem;text-decoration:none;
-  display:flex;justify-content:space-between;max-width:230px;
+  text-transform:uppercase;letter-spacing:.05em;font-size:.95rem;text-decoration:none;
+  display:flex;justify-content:space-between;max-width:250px;
 }
 .side-nav a span{color:var(--muted)}
 .side-nav a:hover{color:var(--accent)}
 .side-nav a:hover span{color:var(--accent)}
 .side-label{
-  margin:2.8rem 0 .8rem;text-transform:uppercase;letter-spacing:.12em;
+  margin:2.8rem 0 .8rem;text-transform:uppercase;letter-spacing:.05em;
   font-size:.78rem;color:var(--muted);
 }
 .side-projects{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.5rem;overflow:auto}
 .side-projects a{
-  text-transform:uppercase;letter-spacing:.1em;font-size:.85rem;text-decoration:none;color:var(--ink);
+  text-transform:uppercase;letter-spacing:.045em;font-size:.85rem;text-decoration:none;color:var(--ink);
 }
 .side-projects a::before{content:"→ ";color:var(--muted)}
 .side-projects a:hover{color:var(--accent)}
@@ -63,13 +63,13 @@ a{color:var(--ink)}
 
 /* ---------- Content column ---------- */
 .content{margin-left:var(--sidebar);padding:35px 45px 0 30px}
-.col-label{text-transform:uppercase;letter-spacing:.12em;font-size:.8rem;color:var(--muted);margin:0 0 .9rem}
+.col-label{text-transform:uppercase;letter-spacing:.05em;font-size:.8rem;color:var(--muted);margin:0 0 .9rem}
 
 /* ---------- Project feed ---------- */
 .project-block{margin-bottom:130px}
 .block-title{
-  display:block;text-transform:uppercase;letter-spacing:.12em;font-size:1rem;
-  text-decoration:none;margin:0 0 15px;color:var(--ink);
+  display:block;text-transform:uppercase;letter-spacing:.05em;font-size:1.08rem;
+  text-decoration:none;margin:0 0 16px;color:var(--ink);
 }
 .block-title:hover{color:var(--accent)}
 .block-main{display:grid;grid-template-columns:3fr 1.6fr;gap:2.2rem;align-items:start}
@@ -95,15 +95,15 @@ a{color:var(--ink)}
 .car-progress{
   position:absolute;left:0;bottom:0;height:3px;width:0;background:var(--accent);z-index:3;
 }
-.block-text{font-size:.98rem}
+.block-text{font-size:1rem;line-height:1.75;max-width:46ch}
 .block-text p{margin:0 0 1.1rem}
 .case-link{
-  display:inline-block;text-transform:uppercase;letter-spacing:.12em;font-size:.9rem;
+  display:inline-block;text-transform:uppercase;letter-spacing:.05em;font-size:.9rem;
   text-decoration:none;margin-bottom:1.1rem;
 }
 .case-link:hover{color:var(--accent)}
 .block-tags{
-  text-transform:uppercase;letter-spacing:.12em;font-size:.85rem;color:var(--muted);margin:0;
+  text-transform:uppercase;letter-spacing:.05em;font-size:.85rem;color:var(--muted);margin:0;
 }
 
 /* ---------- About ---------- */
@@ -112,7 +112,7 @@ a{color:var(--ink)}
   padding:40px 0 130px;align-items:start;
 }
 .about-photo img{width:100%;aspect-ratio:4/5;object-fit:cover;display:block}
-.about-bio p{margin:0 0 1.1rem;font-size:.98rem}
+.about-bio p{margin:0 0 1.15rem;font-size:1rem;line-height:1.75}
 .about-connect{display:flex;flex-direction:column;gap:.55rem;align-items:flex-start}
 .about-connect > a{text-underline-offset:3px}
 .about-connect > a:hover{color:var(--accent)}
@@ -122,10 +122,10 @@ a{color:var(--ink)}
 .experience{padding:0 0 130px;max-width:860px}
 .timeline{list-style:none;margin:0;padding:0}
 .timeline li{display:grid;grid-template-columns:170px 1fr;gap:1.4rem;padding:1.1rem 0;border-top:1px solid var(--line)}
-.timeline time{text-transform:uppercase;letter-spacing:.1em;font-size:.85rem;color:var(--muted)}
-.timeline h3{margin:0 0 .3rem;font-size:1rem;text-transform:uppercase;letter-spacing:.08em}
-.timeline p{margin:0;color:#cfccc2;font-size:.95rem}
-.tools-line{margin-top:1.6rem;color:var(--muted);font-size:.9rem;text-transform:uppercase;letter-spacing:.08em}
+.timeline time{text-transform:uppercase;letter-spacing:.045em;font-size:.85rem;color:var(--muted)}
+.timeline h3{margin:0 0 .3rem;font-size:1rem;text-transform:uppercase;letter-spacing:.04em}
+.timeline p{margin:0;color:#cfccc2;font-size:.97rem;line-height:1.7}
+.tools-line{margin-top:1.6rem;color:var(--muted);font-size:.9rem;text-transform:uppercase;letter-spacing:.04em}
 
 /* ---------- Footer ---------- */
 .footer{
@@ -159,21 +159,20 @@ a{color:var(--ink)}
   font-size:1.3rem;cursor:pointer;line-height:1;z-index:2;
 }
 .modal h3{margin:.2rem 0 .6rem;font-size:1.5rem;text-transform:uppercase;letter-spacing:.06em}
-.kicker{text-transform:uppercase;letter-spacing:.12em;font-size:.8rem;color:var(--muted);margin:0 0 .4rem}
+.kicker{text-transform:uppercase;letter-spacing:.05em;font-size:.8rem;color:var(--muted);margin:0 0 .4rem}
 .modal-meta{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.1rem 0 1.4rem}
-.modal-meta dt{text-transform:uppercase;letter-spacing:.1em;font-size:.75rem;color:var(--muted)}
+.modal-meta dt{text-transform:uppercase;letter-spacing:.045em;font-size:.75rem;color:var(--muted)}
 .modal-meta dd{margin:.2rem 0 0}
 .pill{
   display:inline-block;border:1.5px solid var(--ink);color:var(--ink);text-decoration:none;
-  padding:.68rem 1.5rem;border-radius:999px;text-transform:uppercase;letter-spacing:.1em;font-size:.85rem;
-  transition:background .25s ease,color .25s ease;background:transparent;cursor:pointer;font-family:var(--mono);
+  padding:.68rem 1.5rem;border-radius:999px;text-transform:uppercase;letter-spacing:.045em;font-size:.85rem;
+  transition:background .25s ease,color .25s ease;background:transparent;cursor:pointer;font-family:var(--sans);
 }
 .pill:hover{background:var(--ink);color:#000}
 
 /* ---------- Custom cursor (coral dot + comet trail) ---------- */
-.cursor{position:fixed;left:0;top:0;width:10px;height:10px;border-radius:50%;background:var(--accent);pointer-events:none;z-index:300;opacity:0;transform:translate(-50%,-50%)}
-.cursor.on{opacity:1}
-.trail-dot{position:fixed;left:0;top:0;border-radius:50%;background:var(--accent);pointer-events:none;z-index:299;opacity:0;transform:translate(-50%,-50%)}
+.cursor{display:none}
+#cursorCanvas{position:fixed;inset:0;pointer-events:none;z-index:300}
 html.lenis, html.lenis body{height:auto}
 .lenis.lenis-smooth{scroll-behavior:auto!important}
 .lenis.lenis-stopped{overflow:hidden}
