@@ -239,18 +239,51 @@ if (window.Lenis && !reduceMotion) {
 }
 
 // ===== Custom cursor — tanvi.network style: a single small coral dot that
-// replaces the native pointer and tracks it 1:1, with no lag, no trailing ring,
-// and no hover or press states. Pointer-fine devices only; touch keeps its
-// native behavior. =====
+// replaces the native pointer, plus a short comet trail: a chain of smaller,
+// fainter dots that follow the pointer's recent path and fade out behind it.
+// Pointer-fine devices only; touch keeps its native behavior. =====
 if (matchMedia("(pointer: fine)").matches) {
   document.body.classList.add("has-cursor");
   const cursor = document.getElementById("cursor");
+  const TRAIL = 14;
+  const ghosts = [];
+  for (let i = 0; i < TRAIL; i++) {
+    const g = document.createElement("span");
+    g.className = "trail-dot";
+    document.body.appendChild(g);
+    ghosts.push(g);
+  }
+  let mx = -100, my = -100, seen = false;
+  const history = [];
   addEventListener("pointermove", e => {
-    cursor.style.left = e.clientX + "px";
-    cursor.style.top = e.clientY + "px";
+    mx = e.clientX; my = e.clientY; seen = true;
+    cursor.style.left = mx + "px";
+    cursor.style.top = my + "px";
     cursor.classList.add("on");
   }, { passive: true });
-  document.addEventListener("pointerleave", () => cursor.classList.remove("on"));
+  document.addEventListener("pointerleave", () => {
+    cursor.classList.remove("on");
+    ghosts.forEach(g => g.style.opacity = 0);
+    history.length = 0; seen = false;
+  });
+  (function trailLoop(){
+    if (seen) {
+      history.unshift({ x: mx, y: my });
+      if (history.length > TRAIL * 2 + 2) history.pop();
+      ghosts.forEach((g, i) => {
+        const p = history[Math.min(history.length - 1, (i + 1) * 2)];
+        if (!p) { g.style.opacity = 0; return; }
+        const dist = Math.hypot(p.x - mx, p.y - my);
+        const size = Math.max(2, 9 - i * 0.55);
+        g.style.width = size + "px";
+        g.style.height = size + "px";
+        g.style.left = p.x + "px";
+        g.style.top = p.y + "px";
+        g.style.opacity = dist < 2 ? 0 : Math.max(0, 0.32 - i * 0.024);
+      });
+    }
+    requestAnimationFrame(trailLoop);
+  })();
 }
 
 // ===== Load intro: black screen with wordmark, then reveal =====
