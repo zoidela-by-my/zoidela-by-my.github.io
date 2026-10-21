@@ -8,175 +8,93 @@
 <meta property="og:title" content="My H. Nguyen — Designer & Maker">
 <meta property="og:description" content="Brand, campaigns, digital design, motion and illustration — designed for connection.">
 <meta property="og:type" content="website">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23111111'/><text x='50' y='68' font-size='54' text-anchor='middle' fill='white' font-family='Arial'>M</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23000'/><text x='50' y='68' font-size='54' text-anchor='middle' fill='%23f2f0ea' font-family='monospace'>M</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <a class="skip" href="#work">Skip to work</a>
-<div class="loader" id="loader" aria-hidden="true"><p class="loader-mark">MY<br>H.<br>NGUYEN</p></div>
 
-<!-- Floating overlay header: wordmark left, two circular buttons right. Hides on scroll down. -->
-<header class="site-header" id="siteHeader">
-  <a class="wordmark" href="#top" aria-label="My H Nguyen home">MY<br>H.<br>NGUYEN</a>
-  <div class="header-actions">
-    <button class="circle-btn circle-solid" id="menuBtn" aria-expanded="false" aria-controls="menuOverlay" aria-label="Open menu"><span class="burger"><i></i><i></i><i></i></span></button>
-  </div>
-</header>
-
-<!-- Full-screen menu overlay -->
-<div class="menu-overlay" id="menuOverlay" hidden>
-  <nav class="menu-nav" aria-label="Menu">
-    <a href="#work">Work</a>
-    <a href="#about">About</a>
-    <a href="#cases">Case studies</a>
-    <a href="#experience">Experience</a>
-    <a href="#contact">Contact</a>
+<!-- Fixed left sidebar: name, vertical nav, featured-project list, socials at bottom -->
+<aside class="sidebar">
+  <a class="logo" href="#top">My H. Nguyen</a>
+  <nav class="side-nav" aria-label="Pages">
+    <a href="#work">Work <span aria-hidden="true">✳</span></a>
+    <a href="#about">About <span aria-hidden="true">✦</span></a>
+    <a href="#experience">Experience <span aria-hidden="true">✜</span></a>
+    <a href="#contact">Contact <span aria-hidden="true">✉</span></a>
   </nav>
-  <div class="menu-bottom">
-    <p class="menu-address">Seattle, Washington<br>United States</p>
-    <p class="menu-contact"><a href="mailto:nguyenmyh99@gmail.com">Email me</a></p>
+  <p class="side-label">Featured projects</p>
+  <ul class="side-projects" id="sideProjects"></ul>
+  <div class="side-socials">
+    <a class="social-circle" href="https://www.linkedin.com/in/myhnguyen99/" target="_blank" rel="noopener" aria-label="LinkedIn">in</a>
+    <a class="social-circle" href="mailto:nguyenmyh99@gmail.com" aria-label="Email">@</a>
   </div>
-</div>
+</aside>
 
-<main id="top">
+<main class="content" id="top">
 
-  <!-- HERO: scroll-scrubbed, matching the reference — the headline stays pinned while
-       a single centered media frame rises from the bottom and scales to full-bleed
-       behind it, then the whole hero releases and scrolls away. Placeholder art:
-       free images from Lorem Picsum (picsum.photos), crossfading like a showreel. -->
-  <section class="hero" id="hero">
-    <div class="hero-stage">
-      <div class="hero-reel" id="heroReel" aria-hidden="true">
-        <img class="reel-img active" src="https://picsum.photos/seed/nguyen-hero1/1600/900" alt="">
-        <img class="reel-img" src="https://picsum.photos/seed/nguyen-hero3/1600/900" alt="" loading="lazy">
-        <img class="reel-img" src="https://picsum.photos/seed/nguyen-hero5/1600/900" alt="" loading="lazy">
-      </div>
-      <div class="hero-copy">
-        <h1 class="hero-title">Multidisciplinary<br>Designer<br>Designing for<br>Connection</h1>
-        <p class="hero-sub">My H. Nguyen — Senior Digital Designer, Seattle</p>
-      </div>
+  <!-- Project feed: one block per project — title, image carousel, text column -->
+  <section class="feed" id="work" aria-label="Selected work">
+    <div id="projectFeed"></div>
+  </section>
+
+  <!-- About: portrait / bio / connect, three columns -->
+  <section class="about" id="about">
+    <div class="about-photo"><img src="assets/art.jpg" alt="Mosaic artwork by My Nguyen" loading="lazy"></div>
+    <div class="about-bio">
+      <p>Multidisciplinary designer based in Seattle. Originally from Vietnam, raised in Sacramento and San Francisco. I studied design and computer science, and I work across brand, campaigns, and digital — building visual stories and the systems behind them.</p>
+      <p>At T-Mobile I lead design for executive presentations, campaign launches, and product marketing, and I defined the visual identity for the T-Mobile Fiber launch. Before that: brand and print at Natera, marketing design for mobile games at Jam City.</p>
+      <p>My practice centers on scalable design systems, accessible design, and work with a point of view — typography and packaging are long-standing loves.</p>
+      <p>Outside of work: exploring Seattle, making mosaics, baking sourdough, and playing video games. I am currently reading <em>Hello Beautiful</em> and building a co-op fishing game.</p>
+    </div>
+    <div class="about-connect">
+      <p class="col-label">Connect:</p>
+      <a href="mailto:nguyenmyh99@gmail.com">Email</a>
+      <a href="https://www.linkedin.com/in/myhnguyen99/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://myhnguyen.com/" target="_blank" rel="noopener">Full portfolio</a>
+      <p class="availability"><strong>I am looking for a senior brand, visual, or digital design role — Seattle, San Francisco, or New York. If that is a team you are building, I would love to talk.</strong></p>
     </div>
   </section>
 
-  <!-- WORK GRID: no heading, 3 columns, square image, bold uppercase title, underlined category -->
-  <section class="work" id="work">
-    <div class="grid" id="projectGrid"></div>
-    <div class="grid-cta">
-      <a class="pill pill-solid" href="https://myhnguyen.com/projects" target="_blank" rel="noopener">See all work</a>
-    </div>
-  </section>
-
-  <!-- ABOUT PANEL: light full-bleed, kicker + giant mixed headline top, pill top-right, 3 divided columns -->
-  <section class="panel" id="about">
-    <div class="panel-head">
-      <div>
-        <p class="kicker">About</p>
-        <h2 class="panel-title">Hello, I’m <em>My</em></h2>
-      </div>
-      <a class="pill pill-outline" href="#contact">Get in touch</a>
-    </div>
-    <div class="panel-cols">
-      <div class="panel-col">
-        <h3>Bio</h3>
-        <p>Multidisciplinary designer based in Seattle. Originally from Vietnam, raised in Sacramento and San Francisco. I studied design and computer science, and I work across brand, campaigns, and digital — building visual stories and the systems behind them.</p>
-        <p>Outside of work: exploring Seattle, making mosaics, baking sourdough, and playing video games.</p>
-      </div>
-      <div class="panel-col">
-        <h3>Services</h3>
-        <ul class="plain-list">
-          <li>Brand Identity</li><li>Digital Design</li><li>UX / UI Design</li><li>Art Direction</li><li>Motion</li><li>Packaging</li><li>Illustration</li><li>Design Systems</li><li>Campaigns</li>
-        </ul>
-      </div>
-      <div class="panel-col">
-        <h3>Currently</h3>
-        <ul class="plain-list">
-          <li>Reading — <em>Hello Beautiful</em></li>
-          <li>Listening — Mustard Service</li>
-          <li>Watching — <em>Castlevania: Nocturne</em></li>
-          <li>Making — a co-op fishing game</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <!-- MARQUEE BAND: black capsules, repeating services -->
-  <div class="marquee-band" id="marqueeBand" role="button" tabindex="0" aria-expanded="false" aria-controls="bandPanel" title="Get in touch"><div class="marquee-track" id="marqueeTrack"></div></div>
-  <div class="band-panel" id="bandPanel" hidden>
-    <form id="bandForm" class="band-form">
-      <p class="band-title">Tell me about your project</p>
-      <label>Your name<input name="name" required autocomplete="name" placeholder="Jane from Acme"></label>
-      <label class="full">Message<textarea name="message" rows="4" required placeholder="The role, the team, the timeline…"></textarea></label>
-      <button class="pill pill-solid" type="submit">Draft email</button>
-      <p class="band-note">Opens your email app with the message pre-filled — nothing sends until you hit send.</p>
-    </form>
-  </div>
-
-  <!-- CASE STUDIES: intro panel, then text-left (28%) / image-right (72%, bleeds to edge) rows -->
-  <section class="cases" id="cases">
-    <div class="cases-intro">
-      <p class="kicker kicker-light">Selected case studies</p>
-      <h2 class="cases-title">Work that <em>lasts</em></h2>
-      <p class="cases-lede">A closer look at four projects — the problem, the system, and what it made possible.</p>
-      <span class="pill pill-outline-light">2021 — Present</span>
-    </div>
-    <div class="cases-pin" id="casesPin">
-      <div class="cases-stage">
-        <div class="case-texts" id="caseTexts"></div>
-        <div class="case-imgs" id="caseImgs"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- EXPERIENCE -->
+  <!-- Experience -->
   <section class="experience" id="experience">
-    <p class="kicker">Experience</p>
-    <h2 class="section-title">Where I’ve been</h2>
+    <p class="col-label">Experience</p>
     <ol class="timeline">
       <li><time>2021 — Present</time><div><h3>T-Mobile — Senior Digital Designer</h3><p>Executive presentations, campaign launches, product marketing, digital advertising and video. Defined the visual identity for the T-Mobile Fiber launch; builds modular design systems and component libraries.</p></div></li>
       <li><time>Before that</time><div><h3>Natera — Visual Designer</h3><p>Brand and print design in healthcare.</p></div></li>
       <li><time>Before that</time><div><h3>Jam City — Marketing Designer</h3><p>Social and advertising creative for mobile games.</p></div></li>
-      <li><time>Earlier</time><div><h3>Frontline Foods · USF Career Services</h3><p>Branding, social, event and print work — including JobFest and Find Your Future.</p></div></li>
+      <li><time>Earlier</time><div><h3>Frontline Foods · USF Career Services</h3><p>Branding, social, event and print work.</p></div></li>
     </ol>
     <p class="tools-line">Figma · Illustrator · Photoshop · After Effects · Premiere · InDesign · Procreate · HTML / CSS / JS · Python · AI-assisted workflows</p>
   </section>
 
+  <!-- Footer: three columns inside the content area -->
+  <footer class="footer" id="contact">
+    <div class="foot-col">
+      <p>© <span id="year"></span> My H. Nguyen</p>
+      <p class="foot-icons">
+        <a href="https://www.linkedin.com/in/myhnguyen99/" target="_blank" rel="noopener">LinkedIn ↗</a>
+        <a href="https://myhnguyen.com/" target="_blank" rel="noopener">Portfolio ↗</a>
+      </p>
+    </div>
+    <nav class="foot-col foot-nav" aria-label="Footer">
+      <a href="#work">Work</a>
+      <a href="#about">About</a>
+      <a href="#experience">Experience</a>
+      <a href="#top">Top</a>
+    </nav>
+    <div class="foot-col">
+      <p class="col-label">Connect:</p>
+      <a href="mailto:nguyenmyh99@gmail.com">Email</a>
+      <a href="https://www.linkedin.com/in/myhnguyen99/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://myhnguyen.com/projects" target="_blank" rel="noopener">All projects</a>
+    </div>
+  </footer>
 
 </main>
-
-<!-- FOOTER: black, wordmark top-left, social circles top-right, big contact blocks, legal bar -->
-<footer class="footer" id="contact">
-  <div class="footer-top">
-    <p class="footer-wordmark">MY<br>H.<br>NGUYEN</p>
-    <div class="socials">
-      <a class="social-circle" href="https://www.linkedin.com/in/myhnguyen99/" target="_blank" rel="noopener" aria-label="LinkedIn">in</a>
-      <a class="social-circle" href="mailto:nguyenmyh99@gmail.com" aria-label="Email">@</a>
-      <a class="social-circle" href="https://myhnguyen.com/" target="_blank" rel="noopener" aria-label="Original portfolio">↗</a>
-    </div>
-  </div>
-  <div class="footer-main">
-    <div class="footer-left">
-      <a class="footer-big" href="mailto:nguyenmyh99@gmail.com">Send me an email</a>
-      <p class="footer-address">Seattle, Washington<br>Available for senior design roles — Seattle · San Francisco · New York</p>
-    </div>
-    <div class="footer-right">
-      <div class="footer-block">
-        <p>Hiring for a senior brand, visual, or digital design role?</p>
-        <a class="footer-huge" href="mailto:nguyenmyh99@gmail.com?subject=Senior%20design%20role">Let’s talk</a>
-      </div>
-      <div class="footer-block">
-        <p>Want to see the full body of work?</p>
-        <a class="footer-huge" href="https://myhnguyen.com/projects" target="_blank" rel="noopener">All projects</a>
-      </div>
-    </div>
-  </div>
-  <div class="footer-bar">
-    <p>© <span id="year"></span> My H. Nguyen</p>
-    <p class="footer-links"><a href="#work">Work</a> | <a href="#about">About</a> | <a href="#cases">Case studies</a> | <a href="#experience">Experience</a></p>
-  </div>
-</footer>
 
 <!-- Project detail modal -->
 <div class="modal-backdrop" id="modalBackdrop" hidden>
@@ -187,7 +105,7 @@
     <h3 id="modalTitle"></h3>
     <p id="modalDesc"></p>
     <dl class="modal-meta"><div><dt>Role</dt><dd id="modalRole"></dd></div><div><dt>Focus</dt><dd id="modalFocus"></dd></div></dl>
-    <a class="pill pill-solid" href="mailto:nguyenmyh99@gmail.com" id="modalCta">Ask me about this project</a>
+    <a class="pill" href="mailto:nguyenmyh99@gmail.com" id="modalCta">Ask me about this project</a>
   </div>
 </div>
 
