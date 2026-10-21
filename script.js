@@ -166,49 +166,47 @@ if (window.Lenis && !reduceMotion) {
   });
 }
 
-// Custom cursor: coral dot that replaces the pointer, plus a comet trail of
-// smaller, fading dots along the pointer's recent path (pointer-fine only).
+// Custom cursor — behavior matched to tanvi.network, original implementation:
+// a small coral dot drawn on a full-viewport canvas, plus a thin straight line
+// segment connecting the pointer's previous-frame position to its current one.
+// The canvas is cleared every frame, so the "trail" exists only while moving
+// (its length is just the distance travelled in one frame) and vanishes the
+// instant the pointer stops. Over links, buttons and form fields the custom
+// cursor is suppressed and the native cursor returns.
 if (matchMedia("(pointer: fine)").matches) {
-  document.body.classList.add("has-cursor");
-  const cursor = document.getElementById("cursor");
-  const TRAIL = 26;
-  const ghosts = [];
-  for (let i = 0; i < TRAIL; i++) {
-    const g = document.createElement("span");
-    g.className = "trail-dot";
-    document.body.appendChild(g);
-    ghosts.push(g);
+  const canvas = document.createElement("canvas");
+  canvas.id = "cursorCanvas";
+  document.body.appendChild(canvas);
+  const ctx = canvas.getContext("2d");
+  const COLOR = "#ff4344";
+  let W = 0, H = 0, mx = -100, my = -100, px = -100, py = -100, seen = false, native = false;
+  function sizeCanvas(){
+    const dpr = Math.min(2, devicePixelRatio || 1);
+    W = innerWidth; H = innerHeight;
+    canvas.width = W * dpr; canvas.height = H * dpr;
+    canvas.style.width = W + "px"; canvas.style.height = H + "px";
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
-  let mx = -100, my = -100, seen = false;
-  const history = [];
+  sizeCanvas();
+  addEventListener("resize", sizeCanvas);
   addEventListener("pointermove", e => {
     mx = e.clientX; my = e.clientY; seen = true;
-    cursor.style.left = mx + "px";
-    cursor.style.top = my + "px";
-    cursor.classList.add("on");
+    native = !!e.target.closest("a, button, input, textarea, select, label");
+    document.body.classList.toggle("has-cursor", !native);
   }, { passive: true });
-  document.addEventListener("pointerleave", () => {
-    cursor.classList.remove("on");
-    ghosts.forEach(g => g.style.opacity = 0);
-    history.length = 0; seen = false;
-  });
-  (function trailLoop(){
-    if (seen) {
-      history.unshift({ x: mx, y: my });
-      if (history.length > TRAIL * 2 + 2) history.pop();
-      ghosts.forEach((g, i) => {
-        const pt = history[Math.min(history.length - 1, (i + 1) * 2)];
-        if (!pt) { g.style.opacity = 0; return; }
-        const dist = Math.hypot(pt.x - mx, pt.y - my);
-        const size = Math.max(2, 9 - i * 0.28);
-        g.style.width = size + "px";
-        g.style.height = size + "px";
-        g.style.left = pt.x + "px";
-        g.style.top = pt.y + "px";
-        g.style.opacity = dist < 2 ? 0 : Math.max(0, 0.32 - i * 0.011);
-      });
+  document.addEventListener("pointerleave", () => { seen = false; });
+  (function draw(){
+    ctx.clearRect(0, 0, W, H);
+    if (seen && !native) {
+      if (px >= 0 && (px !== mx || py !== my)) {
+        ctx.strokeStyle = COLOR; ctx.lineWidth = 2; ctx.lineCap = "round";
+        ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(mx, my); ctx.stroke();
+      }
+      ctx.fillStyle = COLOR;
+      ctx.beginPath(); ctx.arc(mx, my, 4.5, 0, Math.PI * 2); ctx.fill();
     }
-    requestAnimationFrame(trailLoop);
+    px = mx; py = my;
+    requestAnimationFrame(draw);
   })();
 }
 
