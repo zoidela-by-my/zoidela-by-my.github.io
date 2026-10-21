@@ -193,35 +193,14 @@ html.lenis, html.lenis body{height:auto}
 .lenis.lenis-smooth{scroll-behavior:auto!important}
 .lenis.lenis-stopped{overflow:hidden}
 
-/* Custom cursor: small dot that morphs/grows over interactive elements */
-.cursor{position:fixed;left:0;top:0;width:14px;height:14px;border-radius:50%;background:#fff;mix-blend-mode:difference;pointer-events:none;z-index:300;display:none;align-items:center;justify-content:center;transform:translate(-50%,-50%);transition:width .3s ease,height .3s ease}
-.cursor span{font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#000;opacity:0;transition:opacity .2s}
-.cursor.grow{width:36px;height:36px}
+/* Custom cursor — tanvi.network style: one small solid coral dot that REPLACES
+   the pointer, tracks it 1:1 instantly, and never changes state. */
+.cursor{position:fixed;left:0;top:0;width:10px;height:10px;border-radius:50%;background:#ff4a3d;pointer-events:none;z-index:300;opacity:0;transform:translate(-50%,-50%)}
+.cursor.on{opacity:1}
 @media (pointer:fine){
-  body.has-cursor .cursor{display:flex}
+  body.has-cursor, body.has-cursor a, body.has-cursor button, body.has-cursor input, body.has-cursor textarea, body.has-cursor label{cursor:none}
+  body.has-cursor .cursor{display:block}
 }
-
-@keyframes spin{to{transform:rotate(360deg)}}
-
-
-/* Menu overlay: single panel sliding up from the bottom (links arrive with it) */
-.menu-overlay{transform:translateY(100%);transition:transform .55s cubic-bezier(.76,0,.24,1)}
-.menu-overlay.open{transform:translateY(0)}
-.menu-nav a{position:relative}
-.menu-nav a::after{content:"\u2192";margin-left:1.2rem;opacity:0;transition:opacity .2s ease;font-family:Inter,sans-serif;font-style:normal}
-.menu-nav a:hover{font-family:Georgia,serif;font-style:italic;text-transform:lowercase;text-decoration:none}
-.menu-nav a:hover::after{opacity:1}
-
-
-/* Hover transitions */
-.pill{transition:background .25s ease,color .25s ease}
-.footer-huge{transition:letter-spacing .3s ease}
-.footer-huge:hover{font-family:Georgia,serif;font-style:italic;text-transform:none;letter-spacing:0}
-.social-circle{transition:background .3s ease,color .3s ease,transform .3s ease}
-.social-circle:hover{transform:translateY(-3px)}
-::selection{background:#111;color:#fff}
-
-.cursor.ring{width:44px;height:44px;background:transparent;border:2px solid #fff}
 .loader{position:fixed;inset:0;background:var(--black);z-index:400;display:grid;place-items:center;transition:opacity .6s ease,visibility .6s}
 .loader.done{opacity:0;visibility:hidden;pointer-events:none}
 .loader-mark{font-family:var(--display);color:#fff;font-size:2rem;line-height:1.1;text-transform:uppercase;margin:0;text-align:center}
