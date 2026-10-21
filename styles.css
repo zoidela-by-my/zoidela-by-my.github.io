@@ -197,6 +197,7 @@ html.lenis, html.lenis body{height:auto}
    the pointer, tracks it 1:1 instantly, and never changes state. */
 .cursor{position:fixed;left:0;top:0;width:10px;height:10px;border-radius:50%;background:#ff4a3d;pointer-events:none;z-index:300;opacity:0;transform:translate(-50%,-50%)}
 .cursor.on{opacity:1}
+.trail-dot{position:fixed;left:0;top:0;border-radius:50%;background:#ff4a3d;pointer-events:none;z-index:299;opacity:0;transform:translate(-50%,-50%)}
 @media (pointer:fine){
   body.has-cursor, body.has-cursor a, body.has-cursor button, body.has-cursor input, body.has-cursor textarea, body.has-cursor label{cursor:none}
   body.has-cursor .cursor{display:block}
