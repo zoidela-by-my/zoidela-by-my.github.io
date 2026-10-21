@@ -1,4 +1,4 @@
-// My H. Nguyen — portfolio interactions (vanilla JS, no build step)
+// My H. Nguyen — portfolio interactions (original code, vanilla JS, no build step)
 const projects = [
   { id:"tmobile", img:"assets/tmobile.jpg", title:"T-Mobile", tags:"BRANDING · CAMPAIGNS · OOH", cats:["branding","campaigns"], mark:"T",
     short:"Campaigns, executive storytelling and a design system that scales.",
@@ -42,85 +42,101 @@ const projects = [
     role:"UX/UI Designer", focus:"UX/UI, branding, transit" },
 ];
 
-// Work grid — square image, display title, underlined category line
-const grid = document.getElementById("projectGrid");
-projects.forEach((p, i) => {
-  const b = document.createElement("button");
-  b.className = "card"; b.type = "button";
-  b.setAttribute("aria-label", `Open ${p.title} project details`);
-  b.innerHTML = `<div class="card-art"><img src="${p.img}" alt="${p.title} project image" loading="lazy"></div>
-    <div class="card-body"><h3>${p.title}</h3><p class="card-tags">${p.tags}</p><p class="short">${p.short}</p></div>`;
-  b.addEventListener("click", () => openModal(p));
-  grid.appendChild(b);
-  requestAnimationFrame(() => setTimeout(() => b.classList.add("in"), 40 * i));
+const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+// Sidebar featured-project list + the main project feed.
+// Years shown only where the owner has stated them; otherwise the block is
+// titled by project name alone (no invented dates).
+const years = { tmobile: "2021 — Present" };
+
+// Sidebar list (anchors scroll to the project blocks)
+const sideProjects = document.getElementById("sideProjects");
+projects.forEach(p => {
+  const li = document.createElement("li");
+  li.innerHTML = `<a href="#project-${p.id}">${p.title}</a>`;
+  sideProjects.appendChild(li);
 });
 
-// Case studies — pinned sequence: one text block and one image per case,
-// crossfaded / diagonal-wiped by scroll in updateCases()
-const featured = [
-  { id: "tmobile", pill: "2021 — Present" },
-  { id: "jobfest", pill: "Event · Print" },
-  { id: "jamcity", pill: "Social · Advertising" },
-  { id: "seastreetcar", pill: "UX / UI · Seattle" },
-];
-const caseTexts = document.getElementById("caseTexts");
-const caseImgs = document.getElementById("caseImgs");
-const caseBlocks = [], caseImgEls = [];
-featured.forEach(f => {
-  const p = projects.find(x => x.id === f.id);
-  const block = document.createElement("div");
-  block.className = "case-block";
-  block.innerHTML = `<span class="case-year">${f.pill}</span>
-    <h3>${p.title}</h3>
-    <p class="case-client">${p.tags}</p>
-    <p class="case-desc">${p.desc}</p>
-    <button class="pill pill-outline" type="button">View case</button>`;
-  block.querySelector("button").addEventListener("click", () => openModal(p));
-  caseTexts.appendChild(block); caseBlocks.push(block);
-  const img = document.createElement("img");
-  img.src = p.img; img.alt = `${p.title} project image`; img.loading = "lazy";
-  caseImgs.appendChild(img); caseImgEls.push(img);
+// Project feed blocks: title row, image carousel, right text column
+const feed = document.getElementById("projectFeed");
+projects.forEach(p => {
+  const block = document.createElement("article");
+  block.className = "project-block";
+  block.id = `project-${p.id}`;
+  const yr = years[p.id] ? ` <span>(${years[p.id]})</span>` : "";
+  block.innerHTML = `
+    <a class="block-title" href="#project-${p.id}">${p.title}${yr}</a>
+    <div class="block-main">
+      <div class="carousel" data-carousel>
+        <img class="lazy active" src="${p.img}" alt="${p.title} project image" loading="lazy">
+        <button class="car-btn car-prev" type="button" aria-label="Previous image">‹</button>
+        <button class="car-btn car-next" type="button" aria-label="Next image">›</button>
+        <div class="car-progress"></div>
+      </div>
+      <div class="block-text">
+        <p>${p.short} ${p.desc}</p>
+        <a class="case-link" href="#" data-case="${p.id}">↗ Full case study</a>
+        <p class="block-tags">ⓘ ${p.tags}</p>
+      </div>
+    </div>`;
+  block.querySelector("[data-case]").addEventListener("click", e => { e.preventDefault(); openModal(p); });
+  feed.appendChild(block);
 });
-caseImgEls.forEach((img, i) => { img.style.zIndex = i; });
 
-function updateCases(){
-  const pin = document.getElementById("casesPin");
-  if (!pin || reduceMotion) return;
-  const vh = innerHeight;
-  const total = pin.offsetHeight - vh;
-  if (total <= 0) return;
-  const rect = pin.getBoundingClientRect();
-  const progress = Math.max(0, Math.min(1, -rect.top / total));
-  const pos = progress * (caseBlocks.length - 1);
-  const i = Math.min(caseBlocks.length - 2, Math.floor(pos));
-  const frac = pos - Math.floor(pos);
-  caseBlocks.forEach((b, k) => {
-    let o = 0, y = 0;
-    if (k === i) { o = 1 - frac; y = -frac * 24; }
-    else if (k === i + 1) { o = frac; y = (1 - frac) * 24; }
-    else if (pos >= caseBlocks.length - 1 && k === caseBlocks.length - 1) { o = 1; y = 0; }
-    b.style.opacity = o;
-    b.style.transform = `translateY(calc(-50% + ${y}px))`;
-    b.style.pointerEvents = o > 0.5 ? "auto" : "none";
-  });
-  caseImgEls.forEach((img, k) => {
-    if (k <= i) img.style.clipPath = "none";
-    else if (k === i + 1) img.style.clipPath = `polygon(${100 - 140 * frac}% 0, 100% 0, 100% 100%, ${100 - 110 * frac}% 100%)`;
-    else img.style.clipPath = "polygon(100% 0, 100% 0, 100% 100%, 100% 100%)";
-  });
-}
+// Carousels: crossfade autoplay with arrows and a progress strip. With a single
+// slide the controls stay hidden (CSS) and autoplay is a no-op; adding slides
+// to a block's .carousel is all it takes to enable the full behavior.
+document.querySelectorAll("[data-carousel]").forEach(car => {
+  const slides = car.querySelectorAll("img");
+  if (slides.length < 2) { car.querySelector(".car-progress").style.display = "none"; return; }
+  car.classList.add("multi");
+  const bar = car.querySelector(".car-progress");
+  let cur = 0, timer = null, started = null;
+  const DUR = 4200;
+  function show(n){
+    slides[cur].classList.remove("active");
+    cur = (n + slides.length) % slides.length;
+    slides[cur].classList.add("active");
+    restart();
+  }
+  function restart(){
+    clearInterval(timer); started = Date.now();
+    timer = setInterval(() => show(cur + 1), DUR);
+  }
+  car.querySelector(".car-prev").addEventListener("click", () => show(cur - 1));
+  car.querySelector(".car-next").addEventListener("click", () => show(cur + 1));
+  if (!reduceMotion) {
+    restart();
+    (function tick(){
+      if (started) bar.style.width = Math.min(100, (Date.now() - started) / DUR * 100) + "%";
+      requestAnimationFrame(tick);
+    })();
+  }
+});
 
-// Modal
+// Images fade in as they load / enter the viewport
+const lazyIO = new IntersectionObserver(entries => {
+  entries.forEach(en => {
+    if (!en.isIntersecting) return;
+    const img = en.target;
+    if (img.complete && img.naturalWidth) img.classList.add("loaded");
+    else img.addEventListener("load", () => img.classList.add("loaded"), { once: true });
+    lazyIO.unobserve(img);
+  });
+}, { rootMargin: "200px" });
+document.querySelectorAll("img.lazy").forEach(img => lazyIO.observe(img));
+
+// Modal (project details)
 const backdrop = document.getElementById("modalBackdrop");
 let lastFocus = null;
 function openModal(p){
   lastFocus = document.activeElement;
-  document.getElementById("modalTitle").textContent = p.title;
+  document.getElementById("modalArt").innerHTML = `<img src="${p.img}" alt="${p.title} project image">`;
   document.getElementById("modalTags").textContent = p.tags;
+  document.getElementById("modalTitle").textContent = p.title;
   document.getElementById("modalDesc").textContent = p.desc;
   document.getElementById("modalRole").textContent = p.role;
   document.getElementById("modalFocus").textContent = p.focus;
-  document.getElementById("modalArt").innerHTML = `<img src="${p.img}" alt="${p.title} project image">`;
   backdrop.hidden = false;
   document.body.style.overflow = "hidden";
   document.getElementById("modalClose").focus();
@@ -131,117 +147,27 @@ function closeModal(){
   if (lastFocus) lastFocus.focus();
 }
 document.getElementById("modalClose").addEventListener("click", closeModal);
-document.getElementById("modalCta").addEventListener("click", closeModal);
 backdrop.addEventListener("click", e => { if (e.target === backdrop) closeModal(); });
-document.addEventListener("keydown", e => { if (e.key === "Escape" && !backdrop.hidden) closeModal(); });
+addEventListener("keydown", e => { if (e.key === "Escape" && !backdrop.hidden) closeModal(); });
 
-// Full-screen menu overlay
-const menuBtn = document.getElementById("menuBtn");
-const overlay = document.getElementById("menuOverlay");
+// Smooth scrolling (Lenis), guarded: native scroll remains the fallback
 let lenis = null;
-function setMenu(open){
-  if (open) {
-    overlay.hidden = false;
-    requestAnimationFrame(() => requestAnimationFrame(() => overlay.classList.add("open")));
-    if (lenis) lenis.stop();
-  } else {
-    overlay.classList.remove("open");
-    setTimeout(() => { overlay.hidden = true; }, 560);
-    if (lenis) lenis.start();
-  }
-  menuBtn.setAttribute("aria-expanded", open);
-  menuBtn.setAttribute("aria-label", open ? "Close menu" : "Open menu");
-  menuBtn.innerHTML = open ? '<span style="font-size:1.5rem;line-height:1">×</span>' : '<span class="burger"><i></i><i></i><i></i></span>';
-  document.body.style.overflow = open ? "hidden" : "";
-}
-menuBtn.addEventListener("click", () => setMenu(overlay.hidden));
-overlay.querySelectorAll("a").forEach(a => a.addEventListener("click", () => setMenu(false)));
-document.addEventListener("keydown", e => { if (e.key === "Escape" && !overlay.hidden) setMenu(false); });
-
-// Header + hero scroll animation — scrubbed by scroll position, fully reversible,
-// matching the reference site's behavior:
-//  - the two circular buttons hide after ~425px of downward scroll
-//  - the wordmark hides later, after ~980px of downward scroll
-//  - scrolling back up ~30px brings everything back
-//  - the hero headline stays pinned for ~1.15 viewport heights (the sticky stage
-//    plus the hero's extra height), then releases and scrolls away at 1:1
-//  - the single media frame rises 1:1 at first, then scales up, centered,
-//    to near full-bleed by ~820px of scroll, always behind the headline
-const header = document.getElementById("siteHeader");
-const reel = document.getElementById("heroReel");
-const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
-let lastY = scrollY, upAccum = 0;
-
-function onScrollFrame(){
-  const y = scrollY, vh = innerHeight;
-  // header show/hide
-  if (overlay.hidden) {
-    const dy = y - lastY;
-    if (dy < 0) {
-      upAccum += -dy;
-      if (upAccum >= 30) header.classList.remove("hide-buttons", "hide-logo");
-    } else if (dy > 0) {
-      upAccum = 0;
-      if (y > 425) header.classList.add("hide-buttons");
-      if (y > 980) header.classList.add("hide-logo");
-    }
-    if (y < 10) header.classList.remove("hide-buttons", "hide-logo");
-  }
-  lastY = y;
-  // hero reel rise + scale (scrubbed)
-  if (reel && !reduceMotion) {
-    const startOffset = vh * 0.40;
-    const offsetY = startOffset - Math.min(y, startOffset);
-    const sp = Math.max(0, Math.min(1, (y - 200) / 620));
-    const base = reel.offsetWidth || 420;
-    const target = innerWidth * 0.98 / base;
-    const scale = 1 + sp * (target - 1);
-    reel.style.transform = `translate(-50%, -50%) translateY(${offsetY}px) scale(${scale})`;
-  }
-  if (typeof updateCases === "function") updateCases();
-  requestAnimationFrame(onScrollFrame);
-}
-requestAnimationFrame(onScrollFrame);
-
-// Reel stills crossfade on their own timeline, like a playing showreel
-const reelImgs = reel ? reel.querySelectorAll(".reel-img") : [];
-if (reelImgs.length > 1 && !reduceMotion) {
-  let ri = 0;
-  setInterval(() => {
-    reelImgs[ri].classList.remove("active");
-    ri = (ri + 1) % reelImgs.length;
-    reelImgs[ri].classList.add("active");
-  }, 4000);
-}
-
-// Marquee band — services capsules, duplicated for a seamless loop
-const services = ["Brand Identity","Digital Design","Art Direction","Motion","Packaging","Illustration","Design Systems","Campaigns"];
-const track = document.getElementById("marqueeTrack");
-track.innerHTML = [...services, ...services].map(t => `<span>${t}</span>`).join("");
-
-document.getElementById("year").textContent = new Date().getFullYear();
-
-// ===== Smooth scrolling (Lenis), guarded: native scroll remains the fallback =====
 if (window.Lenis && !reduceMotion) {
-  lenis = new Lenis({ duration: 1.15, smoothWheel: true });
+  lenis = new Lenis({ duration: 1.0, smoothWheel: true });
   const lenisRaf = t => { lenis.raf(t); requestAnimationFrame(lenisRaf); };
   requestAnimationFrame(lenisRaf);
   document.querySelectorAll('a[href^="#"]').forEach(a => {
     a.addEventListener("click", e => {
-      const target = document.querySelector(a.getAttribute("href"));
-      if (target) {
-        e.preventDefault();
-        if (!overlay.hidden) { setMenu(false); setTimeout(() => lenis.scrollTo(target), 80); }
-        else lenis.scrollTo(target);
-      }
+      const href = a.getAttribute("href");
+      if (href.length < 2) return;
+      const target = document.querySelector(href);
+      if (target) { e.preventDefault(); lenis.scrollTo(target, { offset: -10 }); }
     });
   });
 }
 
-// ===== Custom cursor — tanvi.network style: a single small coral dot that
-// replaces the native pointer, plus a short comet trail: a chain of smaller,
-// fainter dots that follow the pointer's recent path and fade out behind it.
-// Pointer-fine devices only; touch keeps its native behavior. =====
+// Custom cursor: coral dot that replaces the pointer, plus a comet trail of
+// smaller, fading dots along the pointer's recent path (pointer-fine only).
 if (matchMedia("(pointer: fine)").matches) {
   document.body.classList.add("has-cursor");
   const cursor = document.getElementById("cursor");
@@ -271,14 +197,14 @@ if (matchMedia("(pointer: fine)").matches) {
       history.unshift({ x: mx, y: my });
       if (history.length > TRAIL * 2 + 2) history.pop();
       ghosts.forEach((g, i) => {
-        const p = history[Math.min(history.length - 1, (i + 1) * 2)];
-        if (!p) { g.style.opacity = 0; return; }
-        const dist = Math.hypot(p.x - mx, p.y - my);
+        const pt = history[Math.min(history.length - 1, (i + 1) * 2)];
+        if (!pt) { g.style.opacity = 0; return; }
+        const dist = Math.hypot(pt.x - mx, pt.y - my);
         const size = Math.max(2, 9 - i * 0.28);
         g.style.width = size + "px";
         g.style.height = size + "px";
-        g.style.left = p.x + "px";
-        g.style.top = p.y + "px";
+        g.style.left = pt.x + "px";
+        g.style.top = pt.y + "px";
         g.style.opacity = dist < 2 ? 0 : Math.max(0, 0.32 - i * 0.011);
       });
     }
@@ -286,31 +212,7 @@ if (matchMedia("(pointer: fine)").matches) {
   })();
 }
 
-// ===== Load intro: black screen with wordmark, then reveal =====
-const loader = document.getElementById("loader");
-function dismissLoader(){ if (loader) loader.classList.add("done"); }
-addEventListener("load", () => setTimeout(dismissLoader, 450));
-setTimeout(dismissLoader, 3200); // fallback
-
-// ===== Marquee band: click expands the contact panel (stays open) =====
-const band = document.getElementById("marqueeBand");
-const bandPanel = document.getElementById("bandPanel");
-function openBand(){
-  if (!bandPanel.hidden) return;
-  bandPanel.hidden = false;
-  bandPanel.style.maxHeight = "0px";
-  requestAnimationFrame(() => requestAnimationFrame(() => {
-    bandPanel.style.transition = "max-height .6s cubic-bezier(.22,1,.36,1)";
-    bandPanel.style.maxHeight = bandPanel.scrollHeight + "px";
-  }));
-  band.setAttribute("aria-expanded", "true");
-}
-band.addEventListener("click", openBand);
-band.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openBand(); } });
-document.getElementById("bandForm").addEventListener("submit", e => {
-  e.preventDefault();
-  const d = new FormData(e.target);
-  const subject = encodeURIComponent("Project inquiry — from " + d.get("name"));
-  const body = encodeURIComponent("Hi My,\n\n" + d.get("message") + "\n\n— " + d.get("name"));
-  location.href = `mailto:nguyenmyh99@gmail.com?subject=${subject}&body=${body}`;
-});
+// Page fade-in + footer year
+requestAnimationFrame(() => document.body.classList.add("ready"));
+addEventListener("load", () => document.body.classList.add("ready"));
+document.getElementById("year").textContent = new Date().getFullYear();
