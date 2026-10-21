@@ -245,7 +245,7 @@ if (window.Lenis && !reduceMotion) {
 if (matchMedia("(pointer: fine)").matches) {
   document.body.classList.add("has-cursor");
   const cursor = document.getElementById("cursor");
-  const TRAIL = 14;
+  const TRAIL = 26;
   const ghosts = [];
   for (let i = 0; i < TRAIL; i++) {
     const g = document.createElement("span");
@@ -274,12 +274,12 @@ if (matchMedia("(pointer: fine)").matches) {
         const p = history[Math.min(history.length - 1, (i + 1) * 2)];
         if (!p) { g.style.opacity = 0; return; }
         const dist = Math.hypot(p.x - mx, p.y - my);
-        const size = Math.max(2, 9 - i * 0.55);
+        const size = Math.max(2, 9 - i * 0.28);
         g.style.width = size + "px";
         g.style.height = size + "px";
         g.style.left = p.x + "px";
         g.style.top = p.y + "px";
-        g.style.opacity = dist < 2 ? 0 : Math.max(0, 0.32 - i * 0.024);
+        g.style.opacity = dist < 2 ? 0 : Math.max(0, 0.32 - i * 0.011);
       });
     }
     requestAnimationFrame(trailLoop);
