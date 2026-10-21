@@ -238,24 +238,19 @@ if (window.Lenis && !reduceMotion) {
   });
 }
 
-// ===== Custom cursor: small dot; grows over interactive elements,
-// ring over images. The native cursor stays visible, as on the reference. =====
-if (matchMedia("(pointer: fine)").matches && !reduceMotion) {
+// ===== Custom cursor — tanvi.network style: a single small coral dot that
+// replaces the native pointer and tracks it 1:1, with no lag, no trailing ring,
+// and no hover or press states. Pointer-fine devices only; touch keeps its
+// native behavior. =====
+if (matchMedia("(pointer: fine)").matches) {
   document.body.classList.add("has-cursor");
   const cursor = document.getElementById("cursor");
-  let cx = -100, cy = -100, tx = -100, ty = -100;
-  addEventListener("pointermove", e => { tx = e.clientX; ty = e.clientY; }, { passive: true });
-  (function cursorLoop(){
-    cx += (tx - cx) * 0.22; cy += (ty - cy) * 0.22;
-    cursor.style.left = cx + "px"; cursor.style.top = cy + "px";
-    requestAnimationFrame(cursorLoop);
-  })();
-  document.addEventListener("mouseover", e => {
-    const img = e.target.closest(".card-art, .case-imgs, .hero-reel, .media-block");
-    const inter = e.target.closest("a, button, .card, .marquee-band");
-    cursor.classList.toggle("ring", !!img);
-    cursor.classList.toggle("grow", !img && !!inter);
-  });
+  addEventListener("pointermove", e => {
+    cursor.style.left = e.clientX + "px";
+    cursor.style.top = e.clientY + "px";
+    cursor.classList.add("on");
+  }, { passive: true });
+  document.addEventListener("pointerleave", () => cursor.classList.remove("on"));
 }
 
 // ===== Load intro: black screen with wordmark, then reveal =====
