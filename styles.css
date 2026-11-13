@@ -112,10 +112,10 @@ a{color:var(--ink)}
   padding:40px 0 130px;border-top:1px solid var(--line)}
 .about-collage{position:relative;min-height:560px}
 .about-collage img{position:absolute;display:block}
-.collage-portrait{width:74%;left:13%;top:6%;z-index:2}
+.collage-portrait{width:74%;left:13%;top:2%;z-index:2}
 .collage-tulip-tall{width:34%;left:-4%;top:0;z-index:1}
 .collage-tulip{width:40%;right:-6%;top:2%;z-index:1;transform:scaleX(-1)}
-.collage-plums{width:52%;left:2%;bottom:0;z-index:3}
+.collage-plums{width:58%;left:21%;bottom:0;z-index:3}
 .collage-spark{position:absolute;color:#ffd23f;font-size:1.5rem;z-index:4;line-height:1}
 .collage-spark.s1{top:3%;right:16%}
 .collage-spark.s2{top:26%;left:2%;font-size:1.1rem}
