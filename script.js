@@ -65,9 +65,9 @@ projects.forEach(p => {
   block.id = `project-${p.id}`;
   const yr = years[p.id] ? ` <span>(${years[p.id]})</span>` : "";
   block.innerHTML = `
-    <a class="block-title" href="#project-${p.id}">${p.title}${yr}</a>
+    <a class="block-title" href="case-${p.id}.html">${p.title}${yr}</a>
     <div class="block-main">
-      <div class="carousel" data-carousel>
+      <div class="carousel" data-carousel data-project="${p.id}">
         <img class="lazy active" src="${p.img}" alt="${p.title} project image" loading="lazy">
         <button class="car-btn car-prev" type="button" aria-label="Previous image">‹</button>
         <button class="car-btn car-next" type="button" aria-label="Next image">›</button>
@@ -75,20 +75,48 @@ projects.forEach(p => {
       </div>
       <div class="block-text">
         <p>${p.short} ${p.desc}</p>
-        <a class="case-link" href="#" data-case="${p.id}">↗ Full case study</a>
+        <a class="case-link" href="case-${p.id}.html">↗ Full case study</a>
         <p class="block-tags">ⓘ ${p.tags}</p>
       </div>
     </div>`;
-  block.querySelector("[data-case]").addEventListener("click", e => { e.preventDefault(); openModal(p); });
+  const car = block.querySelector(".carousel");
+  car.style.cursor = "pointer";
+  car.addEventListener("click", e => { if (!e.target.closest(".car-btn")) location.href = `case-${p.id}.html`; });
   feed.appendChild(block);
+});
+
+// Extra slides: probe for additional photos (assets/<id>-2.jpg, -3.jpg, ...)
+// and append the ones that exist, so adding photos needs no code change.
+document.querySelectorAll("[data-carousel]").forEach(car => {
+  const pid = car.dataset.project;
+  let n = 2;
+  (function probe(){
+    if (n > 6) return;
+    const test = new Image();
+    test.onload = () => {
+      const img = document.createElement("img");
+      img.src = test.src; img.alt = ""; img.loading = "lazy";
+      car.insertBefore(img, car.querySelector(".car-prev"));
+      car.dispatchEvent(new CustomEvent("slides-changed"));
+      n++; probe();
+    };
+    test.onerror = () => {};
+    test.src = `assets/${pid}-${n}.jpg`;
+  })();
 });
 
 // Carousels: crossfade autoplay with arrows and a progress strip. With a single
 // slide the controls stay hidden (CSS) and autoplay is a no-op; adding slides
 // to a block's .carousel is all it takes to enable the full behavior.
 document.querySelectorAll("[data-carousel]").forEach(car => {
+  car.addEventListener("slides-changed", () => initCarousel(car));
+  initCarousel(car);
+});
+function initCarousel(car) {
+  if (car.dataset.init) return;
   const slides = car.querySelectorAll("img");
   if (slides.length < 2) { car.querySelector(".car-progress").style.display = "none"; return; }
+  car.dataset.init = "1";
   car.classList.add("multi");
   const bar = car.querySelector(".car-progress");
   let cur = 0, timer = null, started = null;
@@ -112,7 +140,7 @@ document.querySelectorAll("[data-carousel]").forEach(car => {
       requestAnimationFrame(tick);
     })();
   }
-});
+}
 
 // Images fade in as they load / enter the viewport
 const lazyIO = new IntersectionObserver(entries => {
@@ -125,30 +153,6 @@ const lazyIO = new IntersectionObserver(entries => {
   });
 }, { rootMargin: "200px" });
 document.querySelectorAll("img.lazy").forEach(img => lazyIO.observe(img));
-
-// Modal (project details)
-const backdrop = document.getElementById("modalBackdrop");
-let lastFocus = null;
-function openModal(p){
-  lastFocus = document.activeElement;
-  document.getElementById("modalArt").innerHTML = `<img src="${p.img}" alt="${p.title} project image">`;
-  document.getElementById("modalTags").textContent = p.tags;
-  document.getElementById("modalTitle").textContent = p.title;
-  document.getElementById("modalDesc").textContent = p.desc;
-  document.getElementById("modalRole").textContent = p.role;
-  document.getElementById("modalFocus").textContent = p.focus;
-  backdrop.hidden = false;
-  document.body.style.overflow = "hidden";
-  document.getElementById("modalClose").focus();
-}
-function closeModal(){
-  backdrop.hidden = true;
-  document.body.style.overflow = "";
-  if (lastFocus) lastFocus.focus();
-}
-document.getElementById("modalClose").addEventListener("click", closeModal);
-backdrop.addEventListener("click", e => { if (e.target === backdrop) closeModal(); });
-addEventListener("keydown", e => { if (e.key === "Escape" && !backdrop.hidden) closeModal(); });
 
 // Smooth scrolling (Lenis), guarded: native scroll remains the fallback
 let lenis = null;
