@@ -108,11 +108,29 @@ a{color:var(--ink)}
 
 /* ---------- About ---------- */
 .about{
-  display:grid;grid-template-columns:1.2fr 2fr;gap:2.2rem;
-  padding:40px 0 130px;align-items:start;
-}
-.about-photo img{width:100%;aspect-ratio:4/5;object-fit:cover;display:block}
-.about-bio p{margin:0 0 1.15rem;font-size:1rem;line-height:1.75}
+  display:grid;grid-template-columns:1fr 1.35fr;gap:3rem;align-items:start;
+  padding:40px 0 130px;border-top:1px solid var(--line)}
+.about-collage{position:relative;min-height:560px}
+.about-collage img{position:absolute;display:block}
+.collage-portrait{width:74%;left:13%;top:6%;z-index:2}
+.collage-tulip-tall{width:34%;left:-4%;top:0;z-index:1}
+.collage-tulip{width:40%;right:-6%;top:2%;z-index:1;transform:scaleX(-1)}
+.collage-plums{width:52%;left:2%;bottom:0;z-index:3}
+.collage-spark{position:absolute;color:#ffd23f;font-size:1.5rem;z-index:4;line-height:1}
+.collage-spark.s1{top:3%;right:16%}
+.collage-spark.s2{top:26%;left:2%;font-size:1.1rem}
+.collage-spark.s3{bottom:34%;right:4%;font-size:1.2rem}
+.about-hello{font-size:2rem;font-weight:700;line-height:1.25;margin:0 0 1.4rem}
+.about-text p{margin:0 0 1.15rem;font-size:1rem;line-height:1.75;max-width:56ch}
+.about-sub{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+  margin:1.8rem 0 .8rem;font-weight:700}
+.about-services{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:.35rem 1.5rem}
+.about-services li{font-size:.95rem;line-height:1.6}
+.about-currently{display:flex;gap:1.4rem;align-items:center;margin-top:2rem}
+.about-currently img{width:150px;height:150px;object-fit:cover;flex:none}
+.about-currently ul{list-style:none;margin:0;padding:0}
+.about-currently li{font-size:.95rem;line-height:1.65;margin-bottom:.45rem}
+.about-currently li span{color:var(--muted)}
 
 /* ---------- Experience ---------- */
 .experience{padding:0 0 130px;max-width:860px}
@@ -188,6 +206,7 @@ html.lenis, html.lenis body{height:auto}
   .block-main{grid-template-columns:1fr;gap:1.1rem}
   .project-block{margin-bottom:80px}
   .about{grid-template-columns:1fr;padding-bottom:80px}
+  .about-collage{min-height:480px;max-width:420px}
   .experience{padding-bottom:80px}
   .footer{grid-template-columns:1fr;gap:1.6rem;padding-bottom:60px}
   .timeline li{grid-template-columns:1fr;gap:.3rem}
