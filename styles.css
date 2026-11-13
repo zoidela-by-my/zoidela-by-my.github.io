@@ -200,3 +200,30 @@ html.lenis, html.lenis body{height:auto}
   body{transition:none;opacity:1}
   .carousel img{transition:none}
 }
+
+/* ---------- Case-study pages ---------- */
+.back-link{display:inline-block;text-transform:uppercase;letter-spacing:.05em;font-size:.9rem;text-decoration:none;margin-bottom:1.6rem}
+.back-link:hover{color:var(--accent)}
+.case-title{font-size:clamp(1.7rem,3.2vw,2.6rem);text-transform:uppercase;letter-spacing:.04em;margin:0 0 .4rem;line-height:1.15}
+.case-title span{color:var(--muted)}
+.case-tags{text-transform:uppercase;letter-spacing:.05em;font-size:.88rem;color:var(--muted);margin:0 0 1.8rem}
+.case-hero{aspect-ratio:16/10;background:#0a0a0a;overflow:hidden;margin-bottom:2.4rem}
+.case-hero img{width:100%;height:100%;object-fit:cover;display:block}
+.case-grid{display:grid;grid-template-columns:3fr 1.4fr;gap:2.4rem;margin-bottom:3rem;align-items:start}
+.case-overview p{margin:0 0 1.1rem;line-height:1.75;max-width:58ch}
+.case-lede{font-size:1.15rem;font-weight:600}
+.case-meta{margin:0;display:flex;flex-direction:column;gap:1.2rem}
+.case-meta dt{text-transform:uppercase;letter-spacing:.05em;font-size:.78rem;color:var(--muted);margin-bottom:.25rem}
+.case-meta dd{margin:0}
+.case-gallery{display:flex;flex-direction:column;gap:2.2rem;margin-bottom:4rem}
+.case-gallery img{width:100%;display:block;opacity:0;transition:opacity .7s ease}
+.case-gallery img.loaded,.case-hero img.loaded{opacity:1}
+.case-hero img{opacity:0;transition:opacity .7s ease}
+.next-case{display:block;border-top:1px solid var(--line);padding:2rem 0 3.4rem;text-decoration:none}
+.next-case span{display:block;text-transform:uppercase;letter-spacing:.05em;font-size:.8rem;color:var(--muted);margin-bottom:.4rem}
+.next-case strong{font-size:clamp(1.4rem,2.6vw,2rem);text-transform:uppercase;letter-spacing:.03em}
+.next-case:hover strong{color:var(--accent)}
+@media (max-width:1000px){
+  .case-grid{grid-template-columns:1fr;gap:1.4rem}
+  .case-gallery{gap:1.4rem}
+}
