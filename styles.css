@@ -108,15 +108,11 @@ a{color:var(--ink)}
 
 /* ---------- About ---------- */
 .about{
-  display:grid;grid-template-columns:1.2fr 1.5fr 1fr;gap:2.2rem;
+  display:grid;grid-template-columns:1.2fr 2fr;gap:2.2rem;
   padding:40px 0 130px;align-items:start;
 }
 .about-photo img{width:100%;aspect-ratio:4/5;object-fit:cover;display:block}
 .about-bio p{margin:0 0 1.15rem;font-size:1rem;line-height:1.75}
-.about-connect{display:flex;flex-direction:column;gap:.55rem;align-items:flex-start}
-.about-connect > a{text-underline-offset:3px}
-.about-connect > a:hover{color:var(--accent)}
-.availability{margin:1.4rem 0 0;font-size:.95rem}
 
 /* ---------- Experience ---------- */
 .experience{padding:0 0 130px;max-width:860px}
