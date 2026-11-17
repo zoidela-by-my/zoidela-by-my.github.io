@@ -17,7 +17,7 @@ html{scroll-behavior:auto}
 body{
   margin:0;background:var(--bg);color:var(--ink);
   font-family:var(--sans);font-size:16.5px;line-height:1.7;font-weight:500;
-  opacity:0;transition:opacity .8s ease;
+  opacity:0;transition:opacity 300ms cubic-bezier(0.23,1,0.32,1);
 }
 body.ready{opacity:1}
 img{max-width:100%}
@@ -76,7 +76,7 @@ a{color:var(--ink)}
 .carousel{position:relative;aspect-ratio:16/10;background:#0a0a0a;overflow:hidden}
 .carousel img{
   position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;
-  opacity:0;transition:opacity .7s ease;
+  opacity:0;transition:opacity 350ms cubic-bezier(0.23,1,0.32,1);
 }
 .carousel img.active{opacity:1}
 .carousel img.lazy{opacity:0}
@@ -93,7 +93,8 @@ a{color:var(--ink)}
 .car-prev{left:12px}
 .car-next{right:12px}
 .car-progress{
-  position:absolute;left:0;bottom:0;height:3px;width:0;background:var(--accent);z-index:3;
+  position:absolute;left:0;bottom:0;height:3px;width:100%;background:var(--accent);z-index:3;
+  transform:scaleX(0);transform-origin:left;
 }
 .block-text{font-size:1rem;line-height:1.75;max-width:46ch}
 .block-text p{margin:0 0 1.1rem}
