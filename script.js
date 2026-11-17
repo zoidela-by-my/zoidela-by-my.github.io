@@ -135,10 +135,19 @@ function initCarousel(car) {
   car.querySelector(".car-next").addEventListener("click", () => show(cur + 1));
   if (!reduceMotion) {
     restart();
-    (function tick(){
-      if (started) bar.style.width = Math.min(100, (Date.now() - started) / DUR * 100) + "%";
-      requestAnimationFrame(tick);
-    })();
+    // Progress bar: GPU transform (scaleX), and the rAF loop only runs
+    // while this carousel is actually on screen.
+    let visible = false, rafId = null;
+    function tick(){
+      if (started) bar.style.transform = "scaleX(" + Math.min(1, (Date.now() - started) / DUR) + ")";
+      rafId = visible ? requestAnimationFrame(tick) : null;
+    }
+    new IntersectionObserver(entries => {
+      entries.forEach(en => {
+        if (en.isIntersecting && !visible) { visible = true; rafId = requestAnimationFrame(tick); }
+        if (!en.isIntersecting) { visible = false; if (rafId) cancelAnimationFrame(rafId); rafId = null; }
+      });
+    }).observe(car);
   }
 }
 
